@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Level IT (9626) - IT in Society Assignment Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cambridge: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0056b3',
+                            600: '#004085',
+                            800: '#0c2340',
+                            900: '#08172c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for question drawer */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full font-sans text-slate-800 antialiased flex flex-col min-h-screen">
+
+    <header class="bg-cambridge-900 text-white sticky top-0 z-30 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg font-bold text-xl shadow">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight text-white leading-tight">A-Level IT (9626)</h1>
+                        <p class="text-xs text-blue-200">IT in Society — Assignment Portal</p>
+                    </div>
+                </div>
+
+                <!-- Progress Pill and Mobile Toggle -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden sm:flex items-center bg-cambridge-800 px-3 py-1.5 rounded-full border border-cambridge-600">
+                        <i class="fa-solid fa-tasks text-blue-400 text-xs mr-2"></i>
+                        <span class="text-xs text-slate-200 mr-2 font-medium">Progress:</span>
+                        <span id="header-progress-text" class="text-xs font-bold text-white font-mono">0 / 37</span>
+                        <div class="w-20 bg-slate-700 h-2 rounded-full ml-2 overflow-hidden">
+                            <div id="header-progress-bar" class="bg-emerald-400 h-full transition-all duration-300 w-0"></div>
+                        </div>
+                    </div>
+
+                    <button id="toggle-sidebar-btn" onclick="toggleSidebar()" class="lg:hidden p-2 rounded-md text-slate-300 hover:text-white hover:bg-cambridge-800 focus:outline-none">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex gap-6 relative">
+
+        <!-- Quick Jump Sidebar / Drawer -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-80 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 lg:static lg:w-72 lg:flex-shrink-0 lg:border-r-0 transition duration-300 ease-in-out flex flex-col rounded-xl lg:shadow-sm lg:border lg:border-slate-200 h-[calc(100vh-5rem)] lg:sticky lg:top-20">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-t-xl">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-list-check text-blue-600"></i>
+                    <h2 class="font-semibold text-slate-800 text-sm">Question Index</h2>
+                </div>
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Search & Filter inside Sidebar -->
+            <div class="p-3 border-b border-slate-100 space-y-2">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+                    <input type="text" id="search-input" onkeyup="filterQuestions()" placeholder="Search questions..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-100 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition">
+                </div>
+                <div class="flex gap-1 text-xs">
+                    <button onclick="setFilter('all')" id="filter-all" class="flex-1 py-1 rounded bg-blue-100 text-blue-700 font-medium text-[11px] text-center">All (37)</button>
+                    <button onclick="setFilter('answered')" id="filter-answered" class="flex-1 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 text-[11px] text-center">Done</button>
+                    <button onclick="setFilter('unanswered')" id="filter-unanswered" class="flex-1 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 text-[11px] text-center">Pending</button>
+                </div>
+            </div>
+
+            <!-- Question Navigation List -->
+            <div id="sidebar-question-list" class="flex-1 overflow-y-auto p-2 space-y-1">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Sidebar Footer Quick Actions -->
+            <div class="p-3 border-t border-slate-100 bg-slate-50/50 rounded-b-xl flex flex-col gap-2">
+                <button onclick="scrollToTop()" class="text-xs text-slate-500 hover:text-blue-600 flex items-center justify-center gap-1.5 py-1">
+                    <i class="fa-solid fa-arrow-up"></i> Back to Top
+                </button>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile drawer -->
+        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-30 hidden lg:hidden"></div>
+
+        <!-- Main Questions Feed -->
+        <main class="flex-1 min-w-0 space-y-6">
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 mb-2">
+                            <i class="fa-solid fa-book"></i> Cambridge International A-Level
+                        </span>
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">IT in Society Practice Paper</h2>
+                        <p class="text-sm text-slate-500 mt-1">Complete all 37 past paper questions carefully. Your responses will auto-save in this browser.</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 flex items-center gap-3">
+                        <div class="text-right">
+                            <span class="text-xs text-slate-500 block uppercase font-bold tracking-wider">Total Marks</span>
+                            <span class="text-lg font-extrabold text-blue-700">233 Marks</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200"></div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-500 block uppercase font-bold tracking-wider">Questions</span>
+                            <span class="text-lg font-extrabold text-slate-700">37 Items</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Information Form -->
+                <div class="mt-6">
+                    <label for="student-name" class="block text-sm font-semibold text-slate-700 mb-1">
+                        Student Full Name <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative max-w-lg">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <input type="text" id="student-name" oninput="saveStudentName()" placeholder="Enter your full name (e.g., John Smith)" class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition text-slate-800 font-medium shadow-sm">
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1.5"><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Required for generating your final homework text output file.</p>
+                </div>
+            </div>
+
+            <div id="questions-container" class="space-y-6">
+                <!-- Questions injected via JS -->
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 sticky bottom-4 z-20">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg">
+                        <i class="fa-solid fa-file-arrow-down text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">Ready to Submit?</h4>
+                        <p class="text-xs text-slate-500">Download your formatted <code class="font-mono text-blue-600 bg-blue-50 px-1 py-0.5 rounded">.txt</code> answer file to send to your instructor.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <button onclick="clearAllResponses()" class="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition border border-slate-200 w-full sm:w-auto">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Clear Saved Answers
+                    </button>
+                    <button onclick="exportAnswers()" class="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-lg shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 w-full sm:w-auto">
+                        <i class="fa-solid fa-download"></i> Export Homework File
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-20 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toast-message" class="text-xs font-medium">Progress saved!</span>
+    </div>
+
+    <script>
+        // Complete dataset for 37 questions
+        const questionsData = [
+            {
+                id: 1,
+                paper: "9626/32/M/J/22/Q10",
+                marks: 8,
+                title: "Data Mining Process Phases",
+                text: "The data mining process consists of several phases. Describe the tasks that occur in each of the phases shown below.",
+                subparts: [
+                    { label: "(a) Data understanding", marks: 4 },
+                    { label: "(b) Deployment", marks: 4 }
+                ]
+            },
+            {
+                id: 2,
+                paper: "9626/32/M/J/22/Q8",
+                marks: 4,
+                title: "Client-Server Email System",
+                text: "Email uses a system based on the client-server model. Explain how emails are sent and received using this system.",
+                subparts: [
+                    { label: "Explanation", marks: 4 }
+                ]
+            },
+            {
+                id: 3,
+                paper: "9626/32/M/J/22/Q7",
+                marks: 8,
+                title: "Impact of Computer-Based Training (CBT)",
+                text: "Computer-based training can be used to deliver technology enhanced learning to students. Discuss the impact of the use of computer-based training on student motivation and achievement.",
+                subparts: [
+                    { label: "Discussion", marks: 8 }
+                ]
+            },
+            {
+                id: 4,
+                paper: "9626/32/M/J/22/Q1",
+                marks: 6,
+                title: "Mobile Electronic Wallets",
+                text: "Mobile electronic wallets can be used to make small payments.",
+                subparts: [
+                    { label: "(a) Describe what is meant by a mobile electronic wallet.", marks: 2 },
+                    { label: "(b) A mobile electronic wallet has to be set up on a device before making the first payment using it. Describe how a mobile electronic wallet is set up on a mobile (cell) phone.", marks: 4 }
+                ]
+            },
+            {
+                id: 5,
+                paper: "9626/31/M/J/22/Q6",
+                marks: 8,
+                title: "Retail Store Data Mining",
+                text: "The owners of a retail store have access to databases of customer buying habits. They are going to carry out some data mining.",
+                subparts: [
+                    { label: "(a) Describe what is meant by data mining.", marks: 2 },
+                    { label: "(b) Explain how the information obtained by data mining could be used by the owners of the retail store to increase profits.", marks: 6 }
+                ]
+            },
+            {
+                id: 6,
+                paper: "9626/31/M/J/22/Q4",
+                marks: 8,
+                title: "Online Tutorials - Pros & Cons",
+                text: "Online tutorials are provided to help students learn. Discuss the advantages and disadvantages to students of using online tutorials.",
+                subparts: [
+                    { label: "Discussion", marks: 8 }
+                ]
+            },
+            {
+                id: 7,
+                paper: "9626/32/F/M/22/Q8",
+                marks: 5,
+                title: "Online Tutorials for Training Learners",
+                text: "Online tutorials are a method of providing training courses to learners. Explain how online tutorials can be used to train learners.",
+                subparts: [
+                    { label: "Explanation", marks: 5 }
+                ]
+            },
+            {
+                id: 8,
+                paper: "9626/32/F/M/22/Q2",
+                marks: 10,
+                title: "Social Networking Impacts & Business Use",
+                text: "Two impacts on individuals of the use of social networking are ideological polarisation and stereotyping.",
+                subparts: [
+                    { label: "(a) Ideological polarisation is the separation of political attitudes into extremes. Describe ways in which the use of social networking may lead to the ideological polarisation of individuals.", marks: 2 },
+                    { label: "(b) Stereotyping is having a set idea of what a person or group of people is like even though that idea may be wrong. Describe ways in which the use of social networking may lead to the stereotyping of individuals.", marks: 2 },
+                    { label: "(c) Many businesses now use social networking for marketing their products. Justify the use of social networking by businesses for marketing products.", marks: 6 }
+                ]
+            },
+            {
+                id: 9,
+                paper: "9626/32/O/N/21/Q8",
+                marks: 6,
+                title: "Microblogs for Social Networking",
+                text: "Describe the benefits and drawbacks of using microblogs for social networking.",
+                subparts: [
+                    { label: "Benefits & Drawbacks", marks: 6 }
+                ]
+            },
+            {
+                id: 10,
+                paper: "9626/31/O/N/21/Q7",
+                marks: 10,
+                title: "Web-Conferencing Requirements",
+                text: "Web-conferencing is used to enable people to work together to produce documents.",
+                subparts: [
+                    { label: "(a) Describe, in detail, the hardware that is required for web-conferencing.", marks: 4 },
+                    { label: "(b) Describe the features of web-conferencing software.", marks: 6 }
+                ]
+            },
+            {
+                id: 11,
+                paper: "9626/31/O/N/21/Q6",
+                marks: 7,
+                title: "Effectiveness of Digital Currencies",
+                text: "Digital currencies, such as Bitcoin and Litecoin, can be used to pay for goods and services. Analyse the effectiveness of digital currencies as a method of payment.",
+                subparts: [
+                    { label: "Analysis", marks: 7 }
+                ]
+            },
+            {
+                id: 12,
+                paper: "9626/32/M/J/21/Q5",
+                marks: 6,
+                title: "Electronic Funds Transfer (EFT) in eBusiness",
+                text: "Describe the benefits and drawbacks of using electronic funds transfer systems in eBusiness.",
+                subparts: [
+                    { label: "Benefits & Drawbacks", marks: 6 }
+                ]
+            },
+            {
+                id: 13,
+                paper: "9626/32/M/J/21/Q3",
+                marks: 6,
+                title: "Online Shopping Fraud",
+                text: "Ferdinand shops online using his credit card. Ferdinand has noticed that fraudulent transactions have appeared on his credit card statement. Describe how it is possible for Ferdinand to be subjected to fraud when using his credit card for online shopping.",
+                subparts: [
+                    { label: "Description", marks: 6 }
+                ]
+            },
+            {
+                id: 14,
+                paper: "9626/31/M/J/21/Q8",
+                marks: 6,
+                title: "Blogs & Social Networking",
+                text: "Describe how a blog enables social networking to take place.",
+                subparts: [
+                    { label: "Description", marks: 6 }
+                ]
+            },
+            {
+                id: 15,
+                paper: "9626/32/F/M/21/Q4",
+                marks: 6,
+                title: "Chat Rooms vs Instant Messaging",
+                text: "Describe the differences between chat rooms and instant messaging as methods of social networking.",
+                subparts: [
+                    { label: "Differences", marks: 6 }
+                ]
+            },
+            {
+                id: 16,
+                paper: "9626/32/O/N/20/Q4",
+                marks: 8,
+                title: "Data Mining Social Trends",
+                text: "Discuss the advantages and disadvantages of using data mining to analyse social trends.",
+                subparts: [
+                    { label: "Discussion", marks: 8 }
+                ]
+            },
+            {
+                id: 17,
+                paper: "9626/32/M/J/20/Q9",
+                marks: 11,
+                title: "Web-Conferencing Hardware & Document Review",
+                text: "A group of company managers are going to use a web-conference to discuss the documentation about a new product.",
+                subparts: [
+                    { label: "(a) The developers already have a desktop computer system. Describe the additional computer hardware they need in order to participate in a web-conference.", marks: 3 },
+                    { label: "(b) Describe, in detail, how a web-conference can be used to discuss their visual materials and documents.", marks: 8 }
+                ]
+            },
+            {
+                id: 18,
+                paper: "9626/31/M/J/20/Q3",
+                marks: 8,
+                title: "Social Networks & Youth Social Patterns",
+                text: "Analyse the role of social networks in changing social patterns among young people.",
+                subparts: [
+                    { label: "Analysis", marks: 8 }
+                ]
+            },
+            {
+                id: 19,
+                paper: "9626/31/M/J/20/Q9",
+                marks: 6,
+                title: "MOOC vs Online Tutorials",
+                text: "Compare and contrast the use of a Massive Open Online Course (MOOC) with the use of online tutorials.",
+                subparts: [
+                    { label: "Comparison", marks: 6 }
+                ]
+            },
+            {
+                id: 20,
+                paper: "9626/31/O/N/19/Q1",
+                marks: 10,
+                title: "E-Business Software & Shopping Carts",
+                text: "An online retailer sells his goods through his website. He has used e-business software to create an online store.",
+                subparts: [
+                    { label: "(a) Describe the purpose of a shopping cart within the software.", marks: 2 },
+                    { label: "(b) Apart from the shopping cart, describe, including their use, the software or software modules that the retailer used to set up the online store.", marks: 8 }
+                ]
+            },
+            {
+                id: 21,
+                paper: "9626/32/F/M/19/Q11",
+                marks: 6,
+                title: "Chat Rooms for Market Research",
+                text: "A company has developed a new product. Its market research department has decided to use chat rooms to gather information from potential customers about the product. Explain why they would use a chat room rather than other social networking methods to gather the customer information.",
+                subparts: [
+                    { label: "Explanation", marks: 6 }
+                ]
+            },
+            {
+                id: 22,
+                paper: "9626/32/F/M/19/Q2",
+                marks: 6,
+                title: "Characteristics of Online Tutorials",
+                text: "Online tutorials are used to deliver educational content.",
+                subparts: [
+                    { label: "(a) Describe the characteristics of online tutorials.", marks: 2 },
+                    { label: "(b) Two types of online tutorial are 'recorded' and 'interactive'. 'Recorded' tutorials do not require user input, but 'interactive' tutorials do. Describe the differences between these two types of online tutorial.", marks: 4 }
+                ]
+            },
+            {
+                id: 23,
+                paper: "9626/33/O/N/18/Q10",
+                marks: 8,
+                title: "Social Networking & Face-to-Face Meetings",
+                text: "Social networking has led to a reduction in meeting face to face. Discuss the ways that social networking has changed social patterns.",
+                subparts: [
+                    { label: "Discussion", marks: 8 }
+                ]
+            },
+            {
+                id: 24,
+                paper: "9626/33/O/N/18/Q9",
+                marks: 8,
+                title: "Benefits & Barriers of Online Tutorials",
+                text: "Students often rely on online tutorials for learning.",
+                subparts: [
+                    { label: "(a) Describe the benefits to students of using online tutorials.", marks: 6 },
+                    { label: "(b) Give two reasons why a student might not be able to use online tutorials.", marks: 2 }
+                ]
+            },
+            {
+                id: 25,
+                paper: "9626/33/O/N/18/Q7",
+                marks: 11,
+                title: "Web-Conferencing Technologies",
+                text: "Web-conferencing facilitates real-time online meetings.",
+                subparts: [
+                    { label: "(a) Describe what is meant by web-conferencing.", marks: 5 },
+                    { label: "(b) Describe how web-conferencing is made possible by internet technologies.", marks: 6 }
+                ]
+            },
+            {
+                id: 26,
+                paper: "9626/32/O/N/18/Q1",
+                marks: 13,
+                title: "Credit Card Fraud & Merchant Prevention",
+                text: "Credit card accounts are often required for payment when buying goods online.",
+                subparts: [
+                    { label: "(a) Describe how the use of a credit card for online purchases may subject credit card account holders to fraud.", marks: 5 },
+                    { label: "(b) Explain how a merchant selling goods online can attempt to combat credit card fraud.", marks: 8 }
+                ]
+            },
+            {
+                id: 27,
+                paper: "9626/33/M/J/18/Q12",
+                marks: 8,
+                title: "Impact of E-Business on Society",
+                text: "Evaluate the impact of e-business on society.",
+                subparts: [
+                    { label: "Evaluation", marks: 8 }
+                ]
+            },
+            {
+                id: 28,
+                paper: "9626/32/M/J/18/Q10",
+                marks: 8,
+                title: "Software-Based Training Methods",
+                text: "Discuss the advantages and disadvantages of software-based training methods.",
+                subparts: [
+                    { label: "Discussion", marks: 8 }
+                ]
+            },
+            {
+                id: 29,
+                paper: "9626/32/M/J/22/Q10",
+                marks: 8,
+                title: "Data Mining Phases (Data Understanding & Deployment)",
+                text: "The data mining process consists of several phases. Describe the tasks that occur in each of the phases shown below.",
+                subparts: [
+                    { label: "(a) Data understanding", marks: 4 },
+                    { label: "(b) Deployment", marks: 4 }
+                ]
+            },
+            {
+                id: 30,
+                paper: "9626/32/M/J/18/Q8",
+                marks: 10,
+                title: "Digital Currencies Definition & Impact",
+                text: "Digital currencies have emerged as an alternative financial mechanism.",
+                subparts: [
+                    { label: "(a) Explain what is meant by digital currency.", marks: 2 },
+                    { label: "(b) Evaluate the impact of digital currencies.", marks: 8 }
+                ]
+            },
+            {
+                id: 31,
+                paper: "9626/32/F/M/18/Q12",
+                marks: 8,
+                title: "Impact of Online Banking on Society",
+                text: "Discuss the impact on society of online banking.",
+                subparts: [
+                    { label: "Discussion", marks: 8 }
+                ]
+            },
+            {
+                id: 32,
+                paper: "9626/32/F/M/18/Q2",
+                marks: 8,
+                title: "Network Bandwidth & Video-Conferencing",
+                text: "Analyse the impact of network bandwidth on video-conferencing.",
+                subparts: [
+                    { label: "Analysis", marks: 8 }
+                ]
+            },
+            {
+                id: 33,
+                paper: "9626/33/O/N/17/Q6",
+                marks: 6,
+                title: "IT in Sports Experience",
+                text: "Information technology (IT) has changed the way that people both observe and take part in sports. Describe how IT has changed the sports experience for people.",
+                subparts: [
+                    { label: "Description", marks: 6 }
+                ]
+            },
+            {
+                id: 34,
+                paper: "9626/32/O/N/17/Q2",
+                marks: 4,
+                title: "VR vs AR in Medicine",
+                text: "Virtual reality and augmented reality are technologies used in medicine. Explain the difference between virtual reality and augmented reality.",
+                subparts: [
+                    { label: "Explanation", marks: 4 }
+                ]
+            },
+            {
+                id: 35,
+                paper: "9626/32/M/J/17/Q11",
+                marks: 6,
+                title: "Benefits of MOOC",
+                text: "A college department has a free Massive Open Online Course (MOOC) with access for its students via the World Wide Web. Describe the benefits of a MOOC.",
+                subparts: [
+                    { label: "Benefits", marks: 6 }
+                ]
+            },
+            {
+                id: 36,
+                paper: "9626/31/M/J/17/Q11",
+                marks: 8,
+                title: "Video-Conferencing vs Face-to-Face",
+                text: "A large company employs a small team of workers to design a new, complex product. They all work on the same site and need to discuss possible designs and costings and to exchange documentation on a weekly basis. Network connections are intermittent. The company could use video-conferencing or face-to-face meetings for the workers' discussions. Identify, giving reasons, the more appropriate method.",
+                subparts: [
+                    { label: "Identification & Justification", marks: 8 }
+                ]
+            },
+            {
+                id: 37,
+                paper: "9626/32/F/M/17/Q6",
+                marks: 8,
+                title: "Mobile Chip and PIN Processing in Restaurant",
+                text: "A customer in a restaurant can pay the bill with a credit card using a mobile chip and pin reader carried by a waiter. Describe the computer processing involved in the payment of the bill by credit card using the mobile chip and pin reader.",
+                subparts: [
+                    { label: "Processing Steps", marks: 8 }
+                ]
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        window.onload = function() {
+            loadStudentName();
+            renderQuestions();
+            renderSidebarList();
+            updateProgress();
+        };
+
+        function loadStudentName() {
+            const savedName = localStorage.getItem('student_name_9626');
+            if (savedName) {
+                document.getElementById('student-name').value = savedName;
+            }
+        }
+
+        function saveStudentName() {
+            const name = document.getElementById('student-name').value;
+            localStorage.setItem('student_name_9626', name);
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q) => {
+                const qCard = document.createElement('div');
+                qCard.id = `q-card-${q.id}`;
+                qCard.className = "bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-6 transition hover:shadow-md";
+
+                let subpartsHTML = '';
+                q.subparts.forEach((sub, sIdx) => {
+                    const storageKey = `q_${q.id}_s_${sIdx}`;
+                    const savedAnswer = localStorage.getItem(storageKey) || '';
+
+                    subpartsHTML += `
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs sm:text-sm font-semibold text-slate-800 flex items-center gap-2">
+                                    <span class="text-blue-600 font-mono">${sub.label}</span>
+                                </label>
+                                <span class="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                                    [${sub.marks} ${sub.marks === 1 ? 'Mark' : 'Marks'}]
+                                </span>
+                            </div>
+                            <div class="relative">
+                                <textarea
+                                    id="${storageKey}"
+                                    oninput="handleInput(${q.id}, ${sIdx})"
+                                    placeholder="Type your response here..."
+                                    rows="4"
+                                    class="w-full text-sm p-3.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white transition text-slate-800 font-sans leading-relaxed resize-y"
+                                >${escapeHTML(savedAnswer)}</textarea>
+                                <div class="flex justify-between items-center text-[11px] text-slate-400 mt-1 px-1">
+                                    <span id="counter_${storageKey}">
+                                        ${savedAnswer.trim() ? savedAnswer.trim().split(/\s+/).length : 0} words | ${savedAnswer.length} chars
+                                    </span>
+                                    <span class="text-[10px] text-slate-300">Auto-saved</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-blue-600 text-white font-mono font-bold text-xs px-2.5 py-1 rounded-md shadow-sm">
+                                Q${q.id}
+                            </span>
+                            <span class="text-xs font-mono font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
+                                ${q.paper}
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="q-status-badge-${q.id}" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                                Unanswered
+                            </span>
+                            <span class="text-xs font-extrabold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+                                Total: ${q.marks} Marks
+                            </span>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base mb-1">${q.title}</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed font-sans">${q.text}</p>
+                    ${subpartsHTML}
+                `;
+
+                container.appendChild(qCard);
+                updateQuestionStatus(q.id);
+            });
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        function handleInput(qId, subIdx) {
+            const storageKey = `q_${qId}_s_${subIdx}`;
+            const textarea = document.getElementById(storageKey);
+            const val = textarea.value;
+
+            // Auto save
+            localStorage.setItem(storageKey, val);
+
+            // Update word & char counter
+            const counterSpan = document.getElementById(`counter_${storageKey}`);
+            const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+            counterSpan.textContent = `${words} words | ${val.length} chars`;
+
+            // Update statuses
+            updateQuestionStatus(qId);
+            updateProgress();
+            renderSidebarList();
+        }
+
+        function updateQuestionStatus(qId) {
+            const q = questionsData.find(item => item.id === qId);
+            let hasAny = false;
+            let allFilled = true;
+
+            q.subparts.forEach((sub, sIdx) => {
+                const val = (localStorage.getItem(`q_${qId}_s_${sIdx}`) || '').trim();
+                if (val.length > 0) hasAny = true;
+                if (val.length === 0) allFilled = false;
+            });
+
+            const badge = document.getElementById(`q-status-badge-${qId}`);
+            if (badge) {
+                if (allFilled) {
+                    badge.textContent = "Completed";
+                    badge.className = "text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200";
+                } else if (hasAny) {
+                    badge.textContent = "In Progress";
+                    badge.className = "text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200";
+                } else {
+                    badge.textContent = "Unanswered";
+                    badge.className = "text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200";
+                }
+            }
+        }
+
+        function isQuestionCompleted(qId) {
+            const q = questionsData.find(item => item.id === qId);
+            return q.subparts.every((sub, sIdx) => {
+                const val = (localStorage.getItem(`q_${qId}_s_${sIdx}`) || '').trim();
+                return val.length > 0;
+            });
+        }
+
+        function updateProgress() {
+            let completedCount = 0;
+            questionsData.forEach(q => {
+                if (isQuestionCompleted(q.id)) completedCount++;
+            });
+
+            const total = questionsData.length;
+            const percent = Math.round((completedCount / total) * 100);
+
+            document.getElementById('header-progress-text').textContent = `${completedCount} / ${total}`;
+            document.getElementById('header-progress-bar').style.width = `${percent}%`;
+        }
+
+        function renderSidebarList() {
+            const sidebarContainer = document.getElementById('sidebar-question-list');
+            const searchVal = (document.getElementById('search-input')?.value || '').toLowerCase();
+            sidebarContainer.innerHTML = '';
+
+            questionsData.forEach(q => {
+                const completed = isQuestionCompleted(q.id);
+                const hasPartial = q.subparts.some((sub, sIdx) => (localStorage.getItem(`q_${q.id}_s_${sIdx}`) || '').trim().length > 0);
+
+                // Filter condition
+                if (currentFilter === 'answered' && !completed) return;
+                if (currentFilter === 'unanswered' && completed) return;
+
+                // Search condition
+                const titleMatch = q.title.toLowerCase().includes(searchVal);
+                const paperMatch = q.paper.toLowerCase().includes(searchVal);
+                const idMatch = `q${q.id}`.includes(searchVal);
+                if (searchVal && !titleMatch && !paperMatch && !idMatch) return;
+
+                let iconClass = "fa-circle-notch text-slate-300";
+                if (completed) iconClass = "fa-circle-check text-emerald-500";
+                else if (hasPartial) iconClass = "fa-pen-to-square text-amber-500";
+
+                const navBtn = document.createElement('button');
+                navBtn.onclick = () => scrollToQuestion(q.id);
+                navBtn.className = "w-full text-left px-2.5 py-2 rounded-lg text-xs flex items-center justify-between hover:bg-slate-100 transition group border border-transparent hover:border-slate-200";
+
+                navBtn.innerHTML = `
+                    <div class="flex items-center space-x-2 truncate">
+                        <i class="fa-solid ${iconClass} text-xs"></i>
+                        <span class="font-mono font-bold text-slate-700 group-hover:text-blue-600">Q${q.id}</span>
+                        <span class="text-slate-600 truncate font-medium">${q.title}</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono ml-1 flex-shrink-0">${q.marks}m</span>
+                `;
+
+                sidebarContainer.appendChild(navBtn);
+            });
+        }
+
+        function filterQuestions() {
+            renderSidebarList();
+        }
+
+        function setFilter(filterType) {
+            currentFilter = filterType;
+            ['all', 'answered', 'unanswered'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if (f === filterType) {
+                    btn.className = "flex-1 py-1 rounded bg-blue-100 text-blue-700 font-medium text-[11px] text-center";
+                } else {
+                    btn.className = "flex-1 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 text-[11px] text-center";
+                }
+            });
+            renderSidebarList();
+        }
+
+        function scrollToQuestion(id) {
+            const card = document.getElementById(`q-card-${id}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.classList.add('ring-2', 'ring-blue-500');
+                setTimeout(() => card.classList.remove('ring-2', 'ring-blue-500'), 2000);
+            }
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function exportAnswers() {
+            const studentNameInput = document.getElementById('student-name');
+            const studentName = studentNameInput.value.trim();
+
+            if (!studentName) {
+                showToast("Please enter your full name before downloading!", "fa-triangle-exclamation", "text-amber-400");
+                studentNameInput.focus();
+                studentNameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                studentNameInput.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => studentNameInput.classList.remove('ring-2', 'ring-red-500'), 3000);
+                return;
+            }
+
+            // Generate filename slug
+            const safeNameSlug = studentName.toLowerCase()
+                .replace(/[^a-z0-9]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+            
+            const filename = `${safeNameSlug}-it-in-society-hw-response.txt`;
+
+            // Calculate metrics
+            let completedQuestions = 0;
+            questionsData.forEach(q => {
+                if (isQuestionCompleted(q.id)) completedQuestions++;
+            });
+
+            const currentDate = new Date().toLocaleString('en-US', {
+                dateStyle: 'full',
+                timeStyle: 'short'
+            });
+
+            // Build text file contents
+            let content = `================================================================================\n`;
+            content += `CAMBRIDGE INTERNATIONAL A-LEVEL INFORMATION TECHNOLOGY (9626)\n`;
+            content += `IT IN SOCIETY — HOMEWORK RESPONSE FILE\n`;
+            content += `================================================================================\n\n`;
+            content += `STUDENT NAME      : ${studentName}\n`;
+            content += `DATE OF SUBMISSION: ${currentDate}\n`;
+            content += `COMPLETION STATUS : ${completedQuestions} / ${questionsData.length} Questions Completed\n`;
+            content += `TOTAL MARKS ALLOC : 233 Marks\n`;
+            content += `================================================================================\n\n`;
+
+            questionsData.forEach((q) => {
+                content += `--------------------------------------------------------------------------------\n`;
+                content += `QUESTION ${q.id} [${q.paper}] — (${q.marks} MARKS Total)\n`;
+                content += `Topic: ${q.title}\n`;
+                content += `Question Text: ${q.text}\n`;
+                content += `--------------------------------------------------------------------------------\n`;
+
+                q.subparts.forEach((sub, sIdx) => {
+                    const storageKey = `q_${q.id}_s_${sIdx}`;
+                    const response = (localStorage.getItem(storageKey) || '').trim();
+
+                    content += `\n[Sub-part: ${sub.label} (${sub.marks} Marks)]\n`;
+                    content += `RESPONSE:\n`;
+                    if (response) {
+                        content += `${response}\n`;
+                    } else {
+                        content += `[No response provided]\n`;
+                    }
+                });
+
+                content += `\n\n`;
+            });
+
+            content += `================================================================================\n`;
+            content += `END OF HOMEWORK SUBMISSION FILE\n`;
+            content += `================================================================================\n`;
+
+            // Download file via Blob
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast("Homework text file downloaded successfully!", "fa-circle-check", "text-emerald-400");
+        }
+
+        function clearAllResponses() {
+            if (confirm("Are you sure you want to clear all your saved answers? This action cannot be undone.")) {
+                questionsData.forEach(q => {
+                    q.subparts.forEach((sub, sIdx) => {
+                        localStorage.removeItem(`q_${q.id}_s_${sIdx}`);
+                    });
+                });
+                renderQuestions();
+                renderSidebarList();
+                updateProgress();
+                showToast("All answers cleared successfully.", "fa-trash-can", "text-slate-300");
+            }
+        }
+
+        function showToast(msg, iconClass = "fa-circle-check", iconColor = "text-emerald-400") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.textContent = msg;
+            toastIcon.className = `fa-solid ${iconClass} ${iconColor} text-lg`;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
