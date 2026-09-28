@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT in Society — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+
+<nav class="theory-nav">
+  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · IT in Society</p>
+  <h1 class="title">IT in Society</h1>
+  <p>Technology now touches almost every part of daily life. This page covers how money has gone digital, how organisations mine data for patterns, what social networks do to the people who use them, how IT has changed different sectors, and how technology is used to teach and learn.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="currency">Digital currencies</button>
+  <button class="tab-btn" data-panel="mining">Data mining</button>
+  <button class="tab-btn" data-panel="social">Social networking</button>
+  <button class="tab-btn" data-panel="impact">Impact of IT</button>
+  <button class="tab-btn" data-panel="learning">Technology-enhanced learning</button>
+</nav>
+
+<div class="wrap">
+
+<div class="panel active" id="panel-currency">
+  <h2 class="section-title">Digital currencies <span class="tag">12.1</span></h2>
+  <p><strong>Electronic currency</strong> is a payment that happens in digital form, without the exchange of physical currency such as coins and bank notes. There are several types of electronic currency:</p>
+<div class="block">
+  <ul>
+    <li><strong>Digital currency</strong></li>
+    <li><strong>Virtual currency</strong></li>
+    <li><strong>Cryptocurrency</strong></li>
+    <li><strong>Central bank digital base money</strong></li>
+    <li><strong>Stored value cards</strong></li>
+  </ul>
+</div>
+
+  <h3>Digital currency</h3>
+  <p><strong>Digital currency</strong> is money that is available in a digital or electronic form. Currency is exchanged digitally between computers, instantly, rather than by handing over physical bank notes and coins. Popular ways to pay are credit cards, mobile phones and smart watches, and it makes transactions across borders easy.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Characteristics</th><th>Uses</th></tr>
+<tr><td>Exists only in electronic form, with no coins or notes</td><td>Paying in shops by card, phone or smart watch</td></tr>
+<tr><td>Moves instantly between computers</td><td>Buying goods and services online</td></tr>
+<tr><td>Can be sent across borders and converted between currencies</td><td>Transferring money between accounts, including internationally</td></tr>
+<tr><td>Can be centralised or decentralised</td><td>Paying bills and making in-app purchases</td></tr>
+</table>
+</div>
+
+  <p>Digital currencies can be <strong>centralised</strong> — there is a central body that manages and regulates the use of the currency — or <strong>decentralised</strong> — there is no central body managing the process. The most common way to manage transactions in a decentralised system is with a <strong>ledger</strong>, for example a blockchain.</p>
+
+  <div class="diagram-box">
+<svg class="wide" id="net-svg" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Network of six users, shown first with a central bank and then as a peer-to-peer mesh">
+  <g id="net-central">
+    <line x1="500" y1="130" x2="300" y2="130" stroke="var(--signal-bright)" stroke-width="1.6"/>
+    <line x1="400" y1="208" x2="300" y2="130" stroke="var(--signal-bright)" stroke-width="1.6"/>
+    <line x1="200" y1="208" x2="300" y2="130" stroke="var(--signal-bright)" stroke-width="1.6"/>
+    <line x1="100" y1="130" x2="300" y2="130" stroke="var(--signal-bright)" stroke-width="1.6"/>
+    <line x1="200" y1="52" x2="300" y2="130" stroke="var(--signal-bright)" stroke-width="1.6"/>
+    <line x1="400" y1="52" x2="300" y2="130" stroke="var(--signal-bright)" stroke-width="1.6"/>
+    <rect x="255" y="108" width="90" height="44" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+    <text x="300" y="135" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="var(--signal-bright)">Bank</text>
+  </g>
+  <g id="net-p2p" style="display:none">
+    <line x1="500" y1="130" x2="400" y2="208" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="400" y1="208" x2="200" y2="208" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="200" y1="208" x2="100" y2="130" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="100" y1="130" x2="200" y2="52" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="200" y1="52" x2="400" y2="52" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="400" y1="52" x2="500" y2="130" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="400" y1="208" x2="400" y2="52" stroke="var(--sage)" stroke-width="1.6"/>
+    <line x1="200" y1="208" x2="200" y2="52" stroke="var(--sage)" stroke-width="1.6"/>
+    <rect x="215" y="110" width="170" height="40" rx="4" fill="var(--bg-deep)" stroke="var(--sage)" stroke-width="1.4" stroke-dasharray="5,4"/>
+    <text x="300" y="135" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--sage)">shared ledger</text>
+  </g>
+  <circle cx="500" cy="130" r="16" fill="var(--bg-deep)" stroke="var(--paper-dim)" stroke-width="1.8"/>
+  <text x="500" y="134" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--paper)">A</text>
+  <circle cx="400" cy="208" r="16" fill="var(--bg-deep)" stroke="var(--paper-dim)" stroke-width="1.8"/>
+  <text x="400" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--paper)">B</text>
+  <circle cx="200" cy="208" r="16" fill="var(--bg-deep)" stroke="var(--paper-dim)" stroke-width="1.8"/>
+  <text x="200" y="212" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--paper)">C</text>
+  <circle cx="100" cy="130" r="16" fill="var(--bg-deep)" stroke="var(--paper-dim)" stroke-width="1.8"/>
+  <text x="100" y="134" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--paper)">D</text>
+  <circle cx="200" cy="52" r="16" fill="var(--bg-deep)" stroke="var(--paper-dim)" stroke-width="1.8"/>
+  <text x="200" y="56" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--paper)">E</text>
+  <circle cx="400" cy="52" r="16" fill="var(--bg-deep)" stroke="var(--paper-dim)" stroke-width="1.8"/>
+  <text x="400" y="56" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="var(--paper)">F</text>
+</svg>
+    <p class="signal-caption" id="net-caption">Centralised — every payment passes through one central body, such as a bank</p>
+    <div class="row" style="justify-content:center;">
+      <button class="ghost" id="toggle-net">Show decentralised →</button>
+    </div>
+  </div>
+
+  <h3>Centralised systems</h3>
+<div class="block">
+  <ul>
+    <li><strong>Credit/debit card</strong> — used with card-reading machines. The card can be swiped (the magnetic strip is read), inserted (the chip is read) or tapped (contactless — touching the card to the machine is all that is needed). In every case the data is read, the bank is located from the data, and a request is sent to deduct the amount from the customer's balance and transfer it to the business's bank account.</li>
+    <li><strong>Electronic point of sale (EPOS)</strong> — the computerised system used in shops to enter sales information, run customer loyalty programmes, manage stock and so on. It is the checkout point where the customer's transaction is made electronically. (A traditional POS may involve only physical cash, with records kept in register books.)</li>
+  </ul>
+</div>
+
+  <h3>Decentralised systems</h3>
+<div class="block">
+  <ul>
+    <li><strong>Bitcoin</strong> — a form of cryptocurrency that aims to remove the need for central authorities such as banks or governments. It uses blockchain technology to support peer-to-peer transactions between users on a decentralised network.</li>
+    <li><strong>Litecoin</strong> — a cryptocurrency created from a fork of the Bitcoin blockchain to complete transactions quickly and cheaply. It is also peer-to-peer and decentralised.</li>
+    <li><strong>Peer-to-peer electronic monetary systems</strong> — payment systems designed so that peers can send electronic payments to each other without going through a central body such as a financial institution.</li>
+  </ul>
+</div>
+
+  <h3>Mobile electronic wallet</h3>
+<div class="block">
+  <ul>
+    <li>A method of contactless payment made with a mobile phone, or a smart watch connected to a phone.</li>
+    <li>The user downloads an app that stores their credit card information and other required details.</li>
+    <li>The device is then used as a digital credit/debit card, or electronic wallet.</li>
+    <li>It allows payment for goods and services digitally.</li>
+    <li>Data is read from the device and a request is sent to the bank to transfer money from the user's bank account.</li>
+  </ul>
+</div>
+
+  <p><strong>Setting up a mobile wallet</strong> — this process can be asked as a 4-mark question:</p>
+<div class="block">
+  <ol>
+    <li>The user downloads the app from a finance provider.</li>
+    <li>The user registers with the provider in the app.</li>
+    <li>The user enters their phone number to receive a verification code by SMS.</li>
+    <li>The user authenticates the number by entering the verification code.</li>
+    <li>The user enters credit card details or adds account details, which links the wallet to their bank account.</li>
+    <li>The user authenticates the payment details.</li>
+  </ol>
+</div>
+
+  <h3>Advantages and disadvantages of digital currency</h3>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>No need to carry physical money around</li><li>Provides fixed records of transactions</li><li>If a card, phone or watch is stolen or lost, the bank can be contacted to block all monetary transactions</li><li>Contactless payment can speed up the payment process</li><li>International payments can be made easily from one currency to another</li><li>Contactless payments don't need a PIN each time</li><li>Daily or monthly transaction limits can be set, which helps prevent overspending</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>There is often a limit on contactless payments</li><li>Data sent electronically can be hacked</li><li>There is a risk of being charged for someone else's transaction if you walk past a machine that accepts contactless payment</li><li>Money can be stolen through contactless payment while you are within the range that lets transactions go through</li></ul></div>
+</div>
+
+  <h3>Virtual currency</h3>
+  <p><strong>Virtual currency</strong> is a decentralised system. It exists only within a virtual environment and has no physical form such as bank notes and coins. An example is tokens that can be collected or bought in computer games, letting the user buy new powers or clothing. For this reason a virtual currency is normally specific to the game or application it was created for, and cannot be used elsewhere. Another example is on streaming platforms, where in-app tokens can be bought to trigger special effects or messages that are displayed in real time on the video stream.</p>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Personalises a game or application by making it fun to collect and spend its own currency</li><li>No expensive manufacturing or physical storage costs</li><li>Can be programmed to complete automated transactions</li><li>Increases transaction speeds and removes geographical boundaries</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>It is a decentralised system, so has little regulation</li><li>Usually specific to the context it was created for and can't be spent elsewhere</li><li>Can be subject to scams</li></ul></div>
+</div>
+
+  <h3>Cryptocurrency</h3>
+  <p><strong>Cryptocurrency</strong> is a digital or virtual currency secured by <strong>cryptography</strong>, which makes it very difficult to counterfeit or to spend twice (double spend). Many cryptocurrencies are decentralised networks based on <strong>blockchain</strong> technology — a distributed ledger enforced by a network of separate computers. They are a type of peer-to-peer electronic monetary system. A key feature is that they are generally not issued by any central authority, which makes them resistant to government interference or manipulation. Bitcoin and Litecoin are well-known examples.</p>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Minimal fund-transfer fees compared with banks</li><li>Difficult to counterfeit</li><li>Potential for high returns, so it can be attractive as an investment</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>The decentralised system allows a level of anonymity, which can encourage criminal activity that goes untraced, such as money laundering and tax evasion</li><li>High volatility and potential for large losses</li><li>Because it is unregulated and not backed by a central authority, it is open to cyber attacks and hacking</li></ul></div>
+</div>
+
+  <h3>Central bank digital base money</h3>
+  <p><strong>Central bank digital base money</strong>, also called central bank digital currency (<strong>CBDC</strong>), is the digital form of fiat money. <strong>Fiat money</strong> is the physical money used in a country that is issued by its state bank for paying for goods and services. Digital fiat money digitalises real-world money, effectively creating a digital currency. Like paper bank notes it has its own serial number, which makes it distinguishable and prevents counterfeiting. Banks intend to use it as a controlled supply alongside the existing currency.</p>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Helps prevent crimes such as money laundering and tax evasion, because transactions can be traced</li><li>Cost of producing money falls, because no paper or printing is needed</li><li>Banks can exchange money much faster</li><li>Simplifies the implementation of monetary policy and government functions</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Users may have to give up some privacy</li><li>As a digital currency it is vulnerable to cyber attacks that could lead to loss of funds or sensitive information</li></ul></div>
+</div>
+
+  <h3>Stored value cards</h3>
+  <p><strong>Stored value cards</strong> are similar to credit cards, but have a set amount of currency stored on them. The card can be used to pay for items until the stored value reaches 0. There are two types:</p>
+<div class="table-scroll">
+<table>
+<tr><th>Type</th><th>How it works</th><th>Example</th></tr>
+<tr><td>Closed loop</td><td>A monetary value can be loaded onto the card only once, and it is discarded when all the money is spent</td><td>Gift cards bought for particular stores</td></tr>
+<tr><td>Open loop</td><td>A monetary value can be loaded onto the card repeatedly</td><td>College cafeteria cards that can be recharged many times</td></tr>
+</table>
+</div>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Prevents overspending and debt, because only the set amount can be used unless recharged</li><li>Some stores don't carry out a credit check or minimum-balance check, which makes the cards easy to access</li><li>Payments don't affect the user's credit history, which keeps a level of anonymity</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Some have an inactivity fee or expiry — after a period of no use the stored value expires or a fee is charged</li><li>Purchases don't help build up credit, so some people prefer not to use them</li><li>Closed loop cards limit purchasing power</li><li>There can be fees to reload a card, sometimes making it cheaper to pay with a normal credit card or cash</li></ul></div>
+</div>
+
+  <h3>Impacts and risks of digital currencies</h3>
+  <p>Cryptocurrency in particular is often discussed for its disadvantages, but the impact differs depending on who you are:</p>
+<div class="table-scroll">
+<table>
+<tr><th>Who is affected</th><th>Impact and risks</th></tr>
+<tr><td>Banks</td><td>Lose fee income when payments bypass them, for example cryptocurrency transfers between peers. They may respond by issuing digital currency of their own.</td></tr>
+<tr><td>Governments and tax authorities</td><td>Anonymity lets money laundering and tax evasion go untraced, and decentralised currencies are hard to regulate and can weaken a government's control of its money supply. CBDC transactions can be traced, which helps prevent this.</td></tr>
+<tr><td>Businesses</td><td>Lower transfer fees, faster international payments and access to customers who prefer to pay digitally; but volatile values, the cost of new systems, and the risk of scams or hacked payment data.</td></tr>
+<tr><td>Individuals</td><td>Convenient and no cash to carry, with spending limits available; but data can be hacked, prices can swing and cause large losses, a lost or stolen device can mean lost money, and CBDC may mean less privacy.</td></tr>
+<tr><td>Society</td><td>People without a smartphone, internet access or a bank account can be left out (the digital divide). Mining some cryptocurrencies uses large amounts of electricity.</td></tr>
+</table>
+</div>
+
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Answer each question about digital currencies.</h4>
+  <div class="sub-q">
+    <label>a) The type of electronic currency used only within a particular game or app.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Virtual currency</div>
+    <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) The technology, a distributed ledger, that most decentralised cryptocurrencies rely on.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Blockchain</div>
+    <div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) The kind of stored value card that can be topped up again and again, e.g. a college cafeteria card.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Open loop card</div>
+    <div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) The digital form of fiat money, issued by a country's central bank.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Central bank digital currency (CBDC) / central bank digital base money</div>
+    <div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Describe how a user sets up a mobile electronic wallet on their phone. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Downloads the app from a finance provider</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Registers with the provider in the app</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Enters their phone number so a verification code can be sent by SMS</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Authenticates the number by entering the verification code</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Enters credit card details or adds account details</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This links the wallet to their bank account / authenticates the payment details</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="classify" data-points="5">
+  <p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p>
+  <h4>Click whether each of these is a centralised or decentralised system.</h4>
+  <div class="classify-list">
+       <div class="classify-item" data-answer="cen"><span class="term">Electronic point of sale (EPOS)</span><span class="choices"><button data-choice="cen">Centralised</button><button data-choice="dec">Decentralised</button></span></div>
+ <div class="classify-item" data-answer="cen"><span class="term">Contactless debit card payment</span><span class="choices"><button data-choice="cen">Centralised</button><button data-choice="dec">Decentralised</button></span></div>
+    <div class="classify-item" data-answer="dec"><span class="term">Bitcoin</span><span class="choices"><button data-choice="cen">Centralised</button><button data-choice="dec">Decentralised</button></span></div>
+    <div class="classify-item" data-answer="dec"><span class="term">Litecoin</span><span class="choices"><button data-choice="cen">Centralised</button><button data-choice="dec">Decentralised</button></span></div>
+    <div class="classify-item" data-answer="dec"><span class="term">Peer-to-peer electronic monetary system</span><span class="choices"><button data-choice="cen">Centralised</button><button data-choice="dec">Decentralised</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="2"><p class="q">1. Which type of electronic currency is normally specific to one game or app and can't be spent elsewhere?</p><div class="opts"><button class="opt" data-idx="0">Cryptocurrency</button><button class="opt" data-idx="1">Central bank digital base money</button><button class="opt" data-idx="2">Virtual currency</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. Why can CBDC help prevent money laundering and tax evasion?</p><div class="opts"><button class="opt" data-idx="0">Its transactions can be traced</button><button class="opt" data-idx="1">It is completely anonymous</button><button class="opt" data-idx="2">It is not issued by any central authority</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">3. What is the defining feature of a closed loop stored value card?</p><div class="opts"><button class="opt" data-idx="0">It can be recharged as often as needed</button><button class="opt" data-idx="1">Money can be loaded only once, and the card is discarded when it is spent</button><button class="opt" data-idx="2">It is linked directly to the user's bank overdraft</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-mining">
+  <h2 class="section-title">Data mining <span class="tag">12.2</span></h2>
+  <p><strong>Data mining</strong> is a form of data analysis and artificial intelligence. It is the process of collecting large sets of data and analysing them to identify <strong>patterns and trends</strong>. This information can identify past and future trends that are very valuable to a company. The large sets of data are stored in <strong>data warehouses</strong>. Computers are used for data mining because of the sheer volume of data that has to be searched and analysed.</p>
+
+  <h3>The six stages of data mining</h3>
+  <div class="diagram-box">
+<svg viewBox="0 0 460 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The six stages of data mining as a cycle">
+  <defs><marker id="dm-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--signal-bright)"/></marker></defs>
+  <line x1="145" y1="45" x2="163" y2="45" stroke="var(--signal-bright)" stroke-width="1.6" marker-end="url(#dm-arrow)"/>
+  <line x1="295" y1="45" x2="313" y2="45" stroke="var(--signal-bright)" stroke-width="1.6" marker-end="url(#dm-arrow)"/>
+  <line x1="380" y1="70" x2="380" y2="158" stroke="var(--signal-bright)" stroke-width="1.6" marker-end="url(#dm-arrow)"/>
+  <line x1="315" y1="185" x2="297" y2="185" stroke="var(--signal-bright)" stroke-width="1.6" marker-end="url(#dm-arrow)"/>
+  <line x1="165" y1="185" x2="147" y2="185" stroke="var(--signal-bright)" stroke-width="1.6" marker-end="url(#dm-arrow)"/>
+  <line x1="80" y1="160" x2="80" y2="72" stroke="var(--signal-bright)" stroke-width="1.6" marker-end="url(#dm-arrow)"/>
+  <rect x="15" y="20" width="130" height="50" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+  <text x="80" y="42" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">1 Business</text>
+  <text x="80" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">understanding</text>
+  <rect x="165" y="20" width="130" height="50" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+  <text x="230" y="42" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">2 Data</text>
+  <text x="230" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">understanding</text>
+  <rect x="315" y="20" width="130" height="50" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+  <text x="380" y="42" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">3 Data</text>
+  <text x="380" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">preparation</text>
+  <rect x="315" y="160" width="130" height="50" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+  <text x="380" y="182" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">4 Data</text>
+  <text x="380" y="198" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">modelling</text>
+  <rect x="165" y="160" width="130" height="50" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+  <text x="230" y="182" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">5</text>
+  <text x="230" y="198" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">Evaluation</text>
+  <rect x="15" y="160" width="130" height="50" rx="4" fill="var(--bg-deep)" stroke="var(--signal-bright)" stroke-width="1.8"/>
+  <text x="80" y="182" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">6</text>
+  <text x="80" y="198" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="var(--paper)">Deployment</text>
+  <text x="230" y="118" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--paper-dim)">iterate if results are not satisfactory</text>
+</svg>
+    <p class="diagram-caption">The stages run in order, and results from later stages can send you back to earlier ones</p>
+  </div>
+<div class="table-scroll">
+<table>
+<tr><th>Stage</th><th>What it means</th><th>Example</th></tr>
+<tr><td>1. Business understanding</td><td>Work out what the business wants to achieve with the data, and why the data is being examined</td><td>A store wants to increase sales, so the goal is finding which products are popular with customers</td></tr>
+<tr><td>2. Data understanding</td><td>Get to know the data you have: what information is available and what it looks like</td><td>For customer behaviour, look at purchase history, demographics and preferences</td></tr>
+<tr><td>3. Data preparation</td><td>Clean up and organise the data so it is ready for analysis: fix errors, handle missing information, get it into a useful format</td><td>If some customer records are incomplete, fill in the missing details or remove the incomplete entries</td></tr>
+<tr><td>4. Data modelling</td><td>Build models that can find patterns or make predictions, choosing the right techniques</td><td>Use algorithms to predict which products customers might want, based on their past purchases</td></tr>
+<tr><td>5. Evaluation</td><td>Check how well the models perform: are they accurate, and do they meet the goals set in stage 1?</td><td>Check whether the model's predictions match customers' actual buying behaviour</td></tr>
+<tr><td>6. Deployment</td><td>Put the findings into use in the real world so the business benefits from the insights</td><td>If the model suggests certain marketing strategies, use them in real marketing campaigns</td></tr>
+</table>
+</div>
+<h3>TO DO: for more information for each stage, click see more button</h3>
+  <h3>Stage 1: Business understanding</h3>
+<div class="block">
+  <ul>
+    <li>Business goals and their impact are identified (the need of the business)</li>
+    <li>The situation is assessed to determine what needs to be achieved or solved to reach the goal (what is the problem?)</li>
+    <li>Goals for the data mining process are defined (the objectives that will overcome the problem)</li>
+    <li>A plan is made to develop a roadmap for the data mining process, outlining tasks and timelines to achieve the business objectives</li>
+  </ul>
+</div>
+
+  <h3>Stage 2: Data understanding</h3>
+<div class="block">
+  <ul>
+    <li>The initial collection of data takes place, to explore what data is available</li>
+    <li>The data is documented</li>
+    <li>The sources of the data that has been gathered are listed</li>
+    <li>Data quality is assessed and verified to identify any issues that need to be addressed (checking completeness, accuracy and so on)</li>
+    <li>Variables are identified — recognising the relevant variables that may affect the analysis and decision making</li>
+  </ul>
+</div>
+
+  <h3>Stage 3: Data preparation</h3>
+<div class="block">
+  <ul>
+    <li><strong>Data selection</strong> — relevant data is chosen from the available resources</li>
+    <li><strong>Data cleansing</strong> — errors are corrected, missing values are inserted, and incorrect or inconsistent data is removed</li>
+    <li><strong>Data transformation</strong> — data is constructed and formatted so that it is in the form the business needs</li>
+    <li>This allows patterns and trends related to the business needs to be established in the data</li>
+  </ul>
+</div>
+
+  <h3>Stage 4: Data modelling</h3>
+<div class="block">
+  <ul>
+    <li>Appropriate data mining algorithms are selected, based on the nature of the problem</li>
+    <li>Models are created by running the selected algorithms on existing (historical) data</li>
+    <li>Model parameters are adjusted to improve accuracy and performance</li>
+    <li>Models are validated by testing them on new data, to make sure they generalise well and give reliable results</li>
+  </ul>
+</div>
+
+  <h3>Stage 5: Evaluation</h3>
+<div class="block">
+  <ul>
+    <li>Models are evaluated by assessing their performance and how well they meet the defined goals and objectives</li>
+    <li>Results are interpreted to understand the insights the models generate, and to identify existing patterns and look for new ones</li>
+    <li>Models are compared to find the most effective one</li>
+    <li>Iterate if necessary — if results are not satisfactory, adjustments are made to the models or the data preparation process</li>
+  </ul>
+</div>
+
+  <h3>Stage 6: Deployment</h3>
+<div class="block">
+  <ul>
+    <li>Models are implemented in the business environment or systems for practical use</li>
+    <li>Performance is monitored and documented</li>
+    <li>Final results are reported to stakeholders</li>
+    <li>Results are reviewed to check for errors and to decide how to correct them</li>
+  </ul>
+</div>
+
+  <h3>Uses of data mining</h3>
+
+  <p><strong>National security and surveillance</strong> — data mining analyses huge sets of data to find hidden patterns, predict potential threats and take proactive measures to keep civilians and governments safe and secure.</p>
+<div class="block">
+  <ul>
+    <li><strong>Identifying threats</strong> — finding patterns that suggest terrorist activity, cyber attacks or other criminal actions; for example, spotting threats of violence in social media comment sections</li>
+    <li><strong>Monitoring communications</strong> — searching recorded phone calls, saved emails or other channels for keywords or patterns that suggest suspicious activity</li>
+    <li><strong>Predictive analysis</strong> — mining previous criminal records from police stations to find trends and patterns that may help predict and prevent another security incident</li>
+    <li><strong>Enhancing border security</strong> — analysing travel records and other data at borders to identify individuals who may pose a threat</li>
+    <li><strong>Cyber security</strong> — protecting the computers and networks that hold confidential government data, by recognising patterns that indicate a cyber attack</li>
+    <li><strong>Facial recognition and biometrics</strong> — mining data from CCTV footage or airport check-ins to identify and track individuals who pose a threat</li>
+  </ul>
+</div>
+
+  <p><strong>Businesses</strong> — businesses use data mining to understand their customers and operations better, in order to increase sales and gain an advantage over competitors.</p>
+<div class="block">
+  <ul>
+    <li><strong>Predicting customers' needs</strong> — looking at buying habits helps companies understand their audience and create items and services that suit it</li>
+    <li><strong>Running targeted marketing</strong> — customer profiles can be created so that customers are targeted with special offers and promotions they are more likely to be interested in</li>
+    <li><strong>Predicting trends</strong> — past trends can be recognised and future ones predicted, so businesses can identify their best-selling item, restock it and create similar items</li>
+    <li><strong>Improving sales strategies</strong> — identifying when, what and where customers buy the most, and adjusting inventory and sales schedules to the times that data mining predicts</li>
+    <li><strong>Spotting fraud</strong> — identifying suspicious transactions and building a blocklist of credit card numbers, addresses or sellers, to prevent loss by refusing their orders</li>
+    <li><strong>Enhancing customer service</strong> — analysing customer feedback and complaints to improve service</li>
+  </ul>
+</div>
+
+  <p><strong>Scientific research</strong> — data mining helps researchers speed up their work by digging into big data, finding patterns, making predictions and coming up with new discoveries and solutions.</p>
+<div class="block">
+  <ul>
+    <li><strong>Healthcare research</strong> — doctors and scientists find patterns in medical data, which helps them predict diseases, understand how treatments work and improve patient care</li>
+    <li><strong>Environmental studies</strong> — analysing data such as air quality or temperature to track climate change, predict natural disasters or find ways to protect endangered animals</li>
+    <li><strong>Market research</strong> — analysing shopping patterns, online reviews and social media to understand what customers want, make better products and improve sales strategies</li>
+    <li><strong>Educational research</strong> — educators and policymakers look at test scores, study habits and other data to understand how students learn and to improve teaching methods and materials</li>
+    <li><strong>Genetic research</strong> — mining genetic data to learn about DNA, disease and health, which helps find new treatments and shows how genetics affect health</li>
+    <li><strong>Astronomy</strong> — handling the vast amount of data from telescopes and space missions, which helps discover new stars and galaxies</li>
+    <li><strong>Social science research</strong> — analysing data from surveys, social media and other sources to study human behaviour, social trends and cultural patterns</li>
+  </ul>
+</div>
+
+  <p><strong>Healthcare</strong> — data mining helps healthcare providers make smarter decisions, predict diseases, personalise treatments and improve overall patient care.</p>
+<div class="block">
+  <ul>
+    <li><strong>Predicting diseases</strong> — finding patterns in patient records that predict illnesses such as heart disease or diabetes before they become serious</li>
+    <li><strong>Personalised treatment</strong> — analysing a patient's health data to tailor treatment to them, which can be more effective than one-size-fits-all solutions</li>
+    <li><strong>Drug development</strong> — pharmaceutical companies analyse research data, speeding up the discovery of new drugs and making development more efficient</li>
+    <li><strong>Managing healthcare costs</strong> — hospitals and clinics look at treatment costs and patient outcomes to provide better care at lower cost</li>
+    <li><strong>Reducing hospital readmissions</strong> — predicting which patients are likely to be readmitted, so providers can take preventive measures</li>
+    <li><strong>Preventing fraud and abuse</strong> — detecting false insurance claims or prescription misuse by analysing patterns in billing and clinical data</li>
+  </ul>
+</div>
+
+  <p><strong>Analysis of social and economic trends</strong> — data mining helps experts sift through mountains of data to spot patterns, predict changes and make better-informed decisions about the future.</p>
+<div class="block">
+  <ul>
+    <li><strong>Understanding consumer behaviour</strong> — examining shopping patterns, online searches and social media activity to reveal what people buy and why, and trends in preferences and spending</li>
+    <li><strong>Predicting market trends</strong> — analysing financial data, stock markets and economic indicators to predict future trends, helping investors and businesses decide where to invest or which products might be popular</li>
+    <li><strong>Analysing social media</strong> — looking at posts, likes and shares to identify trends in public opinion, popular culture and political movements</li>
+    <li><strong>Tracking employment and economic growth</strong> — understanding job-market trends, unemployment rates and areas of growth or decline, which governments need for planning</li>
+    <li><strong>Real estate analysis</strong> — analysing changes in property values and rental prices, helping both buyers and sellers make better decisions</li>
+    <li><strong>Identifying public health trends</strong> — spotting the spread of diseases or the effectiveness of health campaigns</li>
+    <li><strong>Assessing environmental impact</strong> — revealing trends in pollution levels or climate change, which is vital for planning and policy making</li>
+  </ul>
+</div>
+
+  <h3>Ethical and privacy concerns</h3>
+  <p>Data mining is very useful, but it also raises important ethical and privacy concerns:</p>
+<div class="block">
+  <ul>
+    <li><strong>Privacy invasion</strong> — it often involves personal data such as shopping habits, social media activity or medical records. People may not know their data is being used this way, which can feel like an invasion of privacy.</li>
+    <li><strong>Data security</strong> — when data is collected and stored for mining, it could be stolen or misused. A hacker could access sensitive information such as bank details or private messages.</li>
+    <li><strong>Misuse of information</strong> — the information can be used in ways that harm people, for example to deny someone a loan, a job or insurance based on their data profile.</li>
+    <li><strong>Bias and discrimination</strong> — the algorithms may be biased and make unfair assumptions about people based on their age, gender, race or where they live, which can lead to discrimination.</li>
+    <li><strong>Consent issues</strong> — people often don't explicitly agree (or don't know) that their data is being mined, which raises the question of whether it is ethical to use their data without clear permission.</li>
+    <li><strong>Transparency</strong> — it can be hard to understand how data mining works and what is done with the data, which can make people distrustful.</li>
+  </ul>
+</div>
+
+  <h3>Advantages and disadvantages of data mining</h3>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Allows organisations to make strategic decisions that help maintain or increase their revenue</li><li>Allows organisations to understand their customers and create the products they need</li><li>Allows individuals to see targeted product advertising based on the things they already like</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Software tools and skilled staff are required</li><li>Many people see data mining as both unethical and an invasion of their privacy</li><li>Storage costs for the data are very high, which increases the cost of data mining</li><li>A great security issue, because hackers want access to data that has such high value</li><li>The outcomes are only predictions based on patterns and trends in past data. It is not an exact science, and predictions can be wrong</li></ul></div>
+</div>
+
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which stage of data mining each activity belongs to.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="s3"><span class="term">Correcting errors and inserting missing values</span><span class="choices"><button data-choice="s1">1 Business</button><button data-choice="s2">2 Understanding</button><button data-choice="s3">3 Preparation</button><button data-choice="s4">4 Modelling</button><button data-choice="s5">5 Evaluation</button><button data-choice="s6">6 Deployment</button></span></div>
+    <div class="classify-item" data-answer="s1"><span class="term">Defining the goal and drawing up a roadmap of tasks and timelines</span><span class="choices"><button data-choice="s1">1 Business</button><button data-choice="s2">2 Understanding</button><button data-choice="s3">3 Preparation</button><button data-choice="s4">4 Modelling</button><button data-choice="s5">5 Evaluation</button><button data-choice="s6">6 Deployment</button></span></div>
+    <div class="classify-item" data-answer="s5"><span class="term">Comparing models to find the most effective one</span><span class="choices"><button data-choice="s1">1 Business</button><button data-choice="s2">2 Understanding</button><button data-choice="s3">3 Preparation</button><button data-choice="s4">4 Modelling</button><button data-choice="s5">5 Evaluation</button><button data-choice="s6">6 Deployment</button></span></div>
+    <div class="classify-item" data-answer="s4"><span class="term">Selecting an algorithm and testing the model on new data</span><span class="choices"><button data-choice="s1">1 Business</button><button data-choice="s2">2 Understanding</button><button data-choice="s3">3 Preparation</button><button data-choice="s4">4 Modelling</button><button data-choice="s5">5 Evaluation</button><button data-choice="s6">6 Deployment</button></span></div>
+    <div class="classify-item" data-answer="s6"><span class="term">Monitoring performance and reporting final results to stakeholders</span><span class="choices"><button data-choice="s1">1 Business</button><button data-choice="s2">2 Understanding</button><button data-choice="s3">3 Preparation</button><button data-choice="s4">4 Modelling</button><button data-choice="s5">5 Evaluation</button><button data-choice="s6">6 Deployment</button></span></div>
+    <div class="classify-item" data-answer="s2"><span class="term">Checking the completeness and accuracy of the data that has been collected</span><span class="choices"><button data-choice="s1">1 Business</button><button data-choice="s2">2 Understanding</button><button data-choice="s3">3 Preparation</button><button data-choice="s4">4 Modelling</button><button data-choice="s5">5 Evaluation</button><button data-choice="s6">6 Deployment</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>A supermarket chain uses data mining to plan its stock and marketing. Answer each question.</h4>
+  <div class="sub-q">
+    <label>a) Where are the very large sets of data stored?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Data warehouses</div>
+    <div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Which part of data preparation corrects errors and inserts missing values?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Data cleansing</div>
+    <div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Give one reason why the outcomes of data mining may be wrong.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>They are only predictions based on patterns and trends in past data (not an exact science)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Give one privacy concern about the supermarket mining its customers' data.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Any one of: customers may not know their data is being used / no clear consent / risk of hackers stealing sensitive data / data could be misused to discriminate against them</div>
+    <div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Describe how data mining is used in healthcare. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Predicting diseases, such as heart disease or diabetes, by finding patterns in patient records</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Personalising treatment by analysing a patient's own health data</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Speeding up drug development by analysing research data</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Managing healthcare costs by comparing treatment costs and patient outcomes</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Reducing hospital readmissions by predicting which patients are likely to return</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Preventing fraud and abuse by spotting false insurance claims or prescription misuse</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. Where are the large sets of data used in data mining stored?</p><div class="opts"><button class="opt" data-idx="0">Data warehouses</button><button class="opt" data-idx="1">Spreadsheets</button><button class="opt" data-idx="2">Email archives</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">2. Why are data mining results not always correct?</p><div class="opts"><button class="opt" data-idx="0">Only new data can be used</button><button class="opt" data-idx="1">They are predictions based on patterns in past data</button><button class="opt" data-idx="2">Computers cannot analyse large sets of data</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="2"><p class="q">3. Which concern is about algorithms making unfair assumptions based on age, gender, race or where someone lives?</p><div class="opts"><button class="opt" data-idx="0">Transparency</button><button class="opt" data-idx="1">Data security</button><button class="opt" data-idx="2">Bias and discrimination</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-social">
+  <h2 class="section-title">Social networking <span class="tag">12.3</span></h2>
+  <p><strong>Social networking</strong> is the use of websites and apps that allow users to communicate and interact with each other.</p>
+
+  <h3>Chat rooms</h3>
+  <p>A <strong>chat room</strong> is an online service that allows multiple users to type messages to each other, so they can chat. Some chat rooms are public and open to anyone; others are private and often need an invitation link or passcode to join. They don't need physical presence, so anyone can join from around the world through the internet. Some support emotes, links and images, but the conversation is mainly text. People use chat rooms to discuss subjects, exchange information or just socialise. They are often found on websites, forums or platforms where people with shared interests gather, and businesses may use them to test or review items, or for customer support chat. In a chat room, messages are visible to all members.</p>
+
+  <h3>Instant messaging</h3>
+  <p><strong>Instant messaging</strong> is real-time communication that lets users exchange text messages instantly over the internet, one-to-one or in groups. It supports multimedia such as images, sound, video and emojis. Most instant messaging facilities have read receipts (showing who has read a message), an online status (showing who is online right now) and an option to turn on notifications of incoming messages. A friend or contact list is also common, letting users send a chat request or block or remove a contact. Many apps include encryption and privacy features to secure the content of messages.</p>
+
+  <h3>Forums</h3>
+  <p>A <strong>forum</strong> is an online platform or website where people hold discussions by posting messages — like a digital bulletin board. Users create topic threads on specific subjects and contribute to ongoing conversations. Each message can be a question, comment or reply, and threads hold a series of related messages in a structured way. Forums are used to share information, ask questions and connect with others who have similar interests or expertise, on topics from hobbies and technology to professional advice and support groups. Threads are organised into discussion groups often called sub-forums. Many forums have rules for posts and moderators who remove posts that break the rules or are off-topic. Some are membership-only, needing an account to post and sometimes even to view earlier threads. Because messages are usually archived, users can go back and refer to past discussions.</p>
+
+  <h3>Email</h3>
+  <p><strong>Email</strong> (electronic mail) is a digital communication method that lets users send and receive messages over the internet. It works through a system of unique addresses for each user, so messages are delivered precisely. An email typically has a subject line, a main body containing the message, and the option to attach files or documents. Users have an inbox for incoming messages and a sent folder for the emails they have sent. Emails can be replied to or forwarded to others. Security measures such as spam filters and encryption protect users from unwanted content and improve privacy. Email serves personal and professional purposes, and is fast but asynchronous — the other person doesn't need to respond at the same moment.</p>
+
+  <h3>Blogs</h3>
+  <p><strong>Blogs</strong> are online journals or informational websites where individuals or organisations regularly post articles, insights or stories. They are typically displayed in reverse chronological order, with the most recent content first. Writers share thoughts, experiences and expertise on topics from personal life to specialised subjects, often in an informal, conversational tone. Besides text, blogs can include images, videos and links to other websites. Readers can usually interact with the blogger through comments, which builds a community around the blog. Blogs began as personal online diaries and have grown to include professional and corporate blogs, and they are now important in digital marketing, journalism and personal expression.</p>
+
+  <h3>Microblogs</h3>
+  <p><strong>Microblogs</strong> let users share brief, concise updates, typically as short text messages. Their defining feature is a <strong>character limit</strong> on each post, restricting messages to a few sentences or a limited number of characters. Users can share real-time information, thoughts and links quickly. Microblogging platforms prioritise immediate, frequent updates, so users keep up an ongoing conversation with their followers. They play a key role in spreading timely information, engaging audiences and encouraging concise communication.</p>
+
+  <h3>Social media</h3>
+  <p><strong>Social media</strong> refers to online platforms and technologies that let users create, share and exchange information, ideas and content in virtual communities. They support interactive communication through text, images, videos and links, and let individuals, businesses and organisations connect with a global audience. Key features are user-generated content, connecting with friends or followers, real-time interaction and sharing multimedia content. Social media shapes public discourse, spreads information and builds online communities.</p>
+
+  <h3>Uses of social networking services by sector</h3>
+  <p class="note">Open each sector to see how individuals and organisations use each service. These are mainly for reading and recognising, not for memorising line by line.</p>
+<details class="fold"><summary>Education</summary><div class="fold-body">
+<div class="table-scroll">
+<table>
+<tr><th>Service</th><th>Individuals</th><th>Organisations</th></tr>
+<tr><td><strong>Chat rooms</strong></td><td>Students collaborate on group projects and discussions</td><td>Educational institutions host virtual classrooms and study groups</td></tr>
+<tr><td><strong>Instant messaging</strong></td><td>Quick communication between students, teachers and parents</td><td>Educational organisations use it for internal communication</td></tr>
+<tr><td><strong>Forums</strong></td><td>Students seek help and discuss academic topics</td><td>Institutions use forums for faculty collaboration and knowledge sharing</td></tr>
+<tr><td><strong>Email</strong></td><td>Students communicate with teachers and peers</td><td>Organisations use email for official announcements and communication</td></tr>
+<tr><td><strong>Blogs</strong></td><td>Students keep personal blogs for reflection and creative writing</td><td>Institutions share updates and educational resources</td></tr>
+<tr><td><strong>Microblogs</strong></td><td>Quick updates on assignments, events or announcements</td><td>Institutions give real-time updates</td></tr>
+<tr><td><strong>Social media</strong></td><td>Students connect on platforms such as Facebook or LinkedIn for networking</td><td>Institutions use it for outreach, event promotion and community engagement</td></tr>
+</table>
+</div>
+</div></details>
+<details class="fold"><summary>Finance</summary><div class="fold-body">
+<div class="table-scroll">
+<table>
+<tr><th>Service</th><th>Individuals</th><th>Organisations</th></tr>
+<tr><td><strong>Chat rooms</strong></td><td>Traders and investors discuss market trends</td><td>Financial institutions use them for internal communication and collaboration</td></tr>
+<tr><td><strong>Instant messaging</strong></td><td>Quick communication about financial queries</td><td>Financial firms use it for internal coordination</td></tr>
+<tr><td><strong>Forums</strong></td><td>Investors take part in financial forums</td><td>Institutions use forums for client engagement and support</td></tr>
+<tr><td><strong>Email</strong></td><td>Communication with financial advisors and institutions</td><td>Official communication within financial firms</td></tr>
+<tr><td><strong>Blogs</strong></td><td>Personal finance blogs offer insights and investment tips</td><td>Institutions may run blogs for market analysis</td></tr>
+<tr><td><strong>Microblogs</strong></td><td>Quick updates on market trends</td><td>Financial firms give brief market updates</td></tr>
+<tr><td><strong>Social media</strong></td><td>Following financial news on platforms such as Twitter</td><td>Institutions use it for brand building, customer relations and market updates</td></tr>
+</table>
+</div>
+</div></details>
+<details class="fold"><summary>Health care</summary><div class="fold-body">
+<div class="table-scroll">
+<table>
+<tr><th>Service</th><th>Individuals</th><th>Organisations</th></tr>
+<tr><td><strong>Chat rooms</strong></td><td>Patients join support chat rooms</td><td>Healthcare organisations use them for internal communication and coordination</td></tr>
+<tr><td><strong>Instant messaging</strong></td><td>Quick communication about health queries</td><td>Healthcare professionals coordinate internally and communicate with patients</td></tr>
+<tr><td><strong>Forums</strong></td><td>Patients take part in health forums for discussion</td><td>Healthcare organisations use forums for knowledge exchange and community engagement</td></tr>
+<tr><td><strong>Email</strong></td><td>Communication between patients and healthcare providers</td><td>Official communication within healthcare institutions</td></tr>
+<tr><td><strong>Blogs</strong></td><td>Personal health blogs share experiences and tips</td><td>Healthcare organisations may run blogs for health education</td></tr>
+<tr><td><strong>Microblogs</strong></td><td>Quick health tips or updates</td><td>Healthcare institutions give brief health awareness messages</td></tr>
+<tr><td><strong>Social media</strong></td><td>Following health-related pages for information</td><td>Public health campaigns, awareness and community engagement</td></tr>
+</table>
+</div>
+</div></details>
+<details class="fold"><summary>Information and news sources</summary><div class="fold-body">
+<div class="table-scroll">
+<table>
+<tr><th>Service</th><th>Individuals</th><th>Organisations</th></tr>
+<tr><td><strong>Chat rooms</strong></td><td>Real-time discussions on current events</td><td>News agencies may use them for internal coordination</td></tr>
+<tr><td><strong>Instant messaging</strong></td><td>Receiving news alerts</td><td>News agencies use it for real-time communication</td></tr>
+<tr><td><strong>Forums</strong></td><td>Discussions on a wide range of topics</td><td>News outlets may run forums for reader engagement</td></tr>
+<tr><td><strong>Email</strong></td><td>Subscribing to newsletters for regular updates</td><td>News agencies use email to distribute newsletters</td></tr>
+<tr><td><strong>Blogs</strong></td><td>Reading blogs for in-depth analysis and opinion</td><td>News outlets use blogs for opinion pieces and extended coverage</td></tr>
+<tr><td><strong>Microblogs</strong></td><td>Receiving quick news updates</td><td>News agencies use them for breaking news and quick updates</td></tr>
+<tr><td><strong>Social media</strong></td><td>Following news pages for updates</td><td>News agencies use it for news distribution, engagement and reaching a broader audience</td></tr>
+</table>
+</div>
+</div></details>
+<details class="fold"><summary>Government</summary><div class="fold-body">
+<div class="table-scroll">
+<table>
+<tr><th>Service</th><th>Individuals</th><th>Organisations</th></tr>
+<tr><td><strong>Chat rooms</strong></td><td>Citizens take part in real-time discussions</td><td>Internal government communication</td></tr>
+<tr><td><strong>Instant messaging</strong></td><td>Citizens reach out to government</td><td>Government staff coordinate and communicate internally</td></tr>
+<tr><td><strong>Forums</strong></td><td>Citizens discuss policies and local issues</td><td>Governments run consultations and gather public feedback</td></tr>
+<tr><td><strong>Email</strong></td><td>Citizens contact departments and apply for services</td><td>Official notices and newsletters sent to citizens</td></tr>
+<tr><td><strong>Blogs</strong></td><td>Citizens and campaigners share political views</td><td>Ministries and politicians publish updates and explain policy</td></tr>
+<tr><td><strong>Microblogs</strong></td><td>Following official announcements and commenting on them</td><td>Emergency alerts and brief public announcements</td></tr>
+<tr><td><strong>Social media</strong></td><td>Following and contacting representatives, joining campaigns</td><td>Public information campaigns and community engagement</td></tr>
+</table>
+</div>
+</div></details>
+
+  <h3>Impact of social networking on individuals</h3>
+
+  <p><strong>Intellectual isolation</strong> is when a person doesn't get to hear or learn about different ideas or opinions — like being in a bubble where you only see things one way, with little chance to learn from other viewpoints or experiences. It can happen because:</p>
+<div class="block">
+  <ul>
+    <li>Algorithms show content based on user preferences, creating <strong>filter bubbles</strong> that limit exposure to diverse perspectives</li>
+    <li>Connecting with like-minded people creates <strong>echo chambers</strong> that limit different viewpoints</li>
+    <li>The ability to block, remove and like content gives only selective exposure</li>
+    <li>Joining online communities on forums and chat rooms easily can limit exposure to a broad range of ideas</li>
+    <li><strong>Confirmation bias</strong> — users actively seek information that confirms their beliefs, reinforcing their own perspectives</li>
+    <li>Certain negative or stereotypical views are amplified, which reduces engagement with other views and adds to polarisation</li>
+    <li>Less face-to-face interaction limits the deeper conversation that takes place in real life and helps you explore new ideas</li>
+    <li>Fear of missing out (FOMO) and following the latest trends pressures users to agree with popular ideas online, limiting critical thinking</li>
+  </ul>
+</div>
+
+  <p><strong>Physical health</strong></p>
+<div class="block">
+  <ul>
+    <li>Excessive use of social media leads to sedentary behaviour, reducing physical activity</li>
+    <li>Late-night use causes sleep disturbance</li>
+    <li>Excessive use can cause eyestrain and discomfort</li>
+  </ul>
+</div>
+
+  <p><strong>Mental health</strong></p>
+<div class="block">
+  <ul>
+    <li>Cyber bullying can damage mental health</li>
+    <li>Constantly comparing your lifestyle with the curated content in your feed leads to anxiety and lower self-esteem</li>
+    <li>Social pressure to follow the latest trends can cause stress</li>
+    <li>Continually checking for updates because of FOMO affects mental wellbeing</li>
+    <li>Work-life balance is reduced, because the same platforms are used for professional and personal purposes</li>
+    <li>Intense information overload can cause cognitive issues</li>
+    <li>Feelings can't be expressed as meaningfully as in real life, which can lead to social isolation</li>
+    <li>Worry that employers may run online background checks causes discomfort and anxiety if something embarrassing is found on a profile</li>
+  </ul>
+</div>
+
+  <p><strong>Ideological polarisation</strong> is when people strongly disagree and drift apart because of differing beliefs or opinions. Groups become more divided in their ideas, making it hard to find common ground. It can happen because:</p>
+<div class="block">
+  <ul>
+    <li>Social networks allow groups (echo chambers) to be created for like-minded individuals</li>
+    <li>They can limit or exclude exposure to, and expression of, alternative viewpoints</li>
+    <li>Information and viewpoints are selective in content</li>
+    <li>Users' views can be manipulated by others</li>
+    <li>They can create groups of geographically remote but like-minded individuals</li>
+  </ul>
+</div>
+
+  <p><strong>Stereotyping</strong> is having a fixed set of ideas about what a person or group is like, even though those ideas may be wrong. Social networking can lead to stereotyping because:</p>
+<div class="block">
+  <ul>
+    <li>Individuals can be subject to intense scrutiny and surveillance</li>
+    <li>Comments can be seen by extremely large numbers of readers</li>
+    <li>Comments can be made that would never be made face to face</li>
+    <li>Intent is lost — readers see only the comment, not the context, so jokes may not look like jokes and sarcasm is lost</li>
+    <li>Individuals may conform to the stereotypes social media demands, to 'fit in' with peers</li>
+  </ul>
+</div>
+
+  <p><strong>Cognitive issues</strong> are difficulties with mental processes such as thinking, memory, problem solving, attention and perception. They can affect a person's ability to understand, learn and process information; examples include memory loss, difficulty concentrating and problems with decision making. Social networking can contribute because:</p>
+<div class="block">
+  <ul>
+    <li>Excessive screen time leads to cognitive fatigue, affecting concentration and attention span</li>
+    <li>Constant exposure to a high volume of data can overwhelm cognitive processing, making it hard to retain or prioritise information</li>
+    <li>Constant multitasking divides attention and reduces concentration on tasks that need focus</li>
+    <li>Negative experiences such as cyber bullying and harassment cause emotional stress and harm cognitive wellbeing</li>
+    <li>Curated, idealised content with no real context increases comparison between your own lifestyle and the lifestyles of others you see online, which can hurt self-esteem</li>
+    <li>Constant FOMO about social events and 'must try' experiences fuelled by social media can create anxiety and cognitive stress</li>
+    <li>Privacy concerns about the potential misuse of personal information add to cognitive stress and anxiety</li>
+  </ul>
+</div>
+
+  <h3>Impact of social networking on businesses, government, news and organisations</h3>
+<div class="table-scroll">
+<table>
+<tr><th>Group</th><th>Positive impact</th><th>Negative impact</th></tr>
+<tr><td><strong>Businesses</strong></td><td>Cheap, wide-reaching advertising and targeted marketing; direct customer feedback and support; a way to build brand loyalty</td><td>Negative comments or complaints can spread quickly and damage reputation; staff may waste time on personal use; risk of leaking confidential information</td></tr>
+<tr><td><strong>Government</strong></td><td>Can consult citizens and see what issues people care about; can share urgent information quickly, for example in emergencies; raises awareness of services and campaigns</td><td>Misinformation and manipulation of public opinion can spread; officials and policies face intense public scrutiny; monitoring citizens' posts raises privacy concerns</td></tr>
+<tr><td><strong>News</strong></td><td>Stories reach a global audience in real time; ordinary people can report events as they happen (citizen journalism); readers can comment and share</td><td>Stories can be sensationalised, or false stories (fake news) can spread faster than corrections; traditional outlets lose readers and advertising income; content can be one-sided</td></tr>
+<tr><td><strong>Organisations</strong> (e.g. charities, schools, clubs)</td><td>Promote events and fundraise cheaply; recruit volunteers and members; keep in touch with supporters and the community</td><td>Reputational damage from negative posts; staff and members may be exposed to cyber bullying; needs staff time to moderate and keep content up to date</td></tr>
+</table>
+</div>
+
+  <h3>Advantages and disadvantages of social networking</h3>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Allows communication on a global scale between individuals, businesses and organisations</li><li>Lets people feel included, because they can share thoughts and ideas with those who share similar opinions</li><li>Lets organisations distribute important, even lifesaving, information in critical situations</li><li>Lets individuals make a living writing online blogs that others enjoy reading</li><li>Lets people seek advice or support on issues including technical support and healthcare, which can improve customer service and care</li><li>Provides a stream of entertainment</li><li>Can expose people to news stories they might not otherwise know about</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>People can feel overwhelmed by all the information and communication they meet</li><li>Some people feel excluded and feel that everyone else has a better life than they do</li><li>Some organisations may falsely represent situations and influence opinion using censored information</li><li>Influencers can lead people to think or do harmful things, such as over-exercising or overspending on expensive clothing</li><li>Contributions to forums can be made by people who are not qualified to give advice, so someone may act on incorrect advice and be harmed</li><li>May be shortening people's attention spans, as they can no longer focus on a single activity for long</li><li>News stories can be sensationalised and falsely reported</li><li>Anonymity can encourage bad or even illegal behaviour that people wouldn't show if they thought others knew who they were</li></ul></div>
+</div>
+
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the social networking service that each description matches.</h4>
+  <div class="sub-q">
+    <label>a) Lets several users type messages to each other; some are public and some need an invitation link or passcode.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Chat room</div>
+    <div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) An online journal whose newest posts appear first, where readers can leave comments.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Blog</div>
+    <div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Short posts restricted by a character limit, used for quick real-time updates.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Microblog</div>
+    <div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Threads of messages grouped into sub-forums, with moderators who remove posts that break the rules.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Forum</div>
+    <div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which impact each statement describes.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="pol"><span class="term">Geographically remote but like-minded people form groups that drift away from other views</span><span class="choices"><button data-choice="iso">Intellectual isolation</button><button data-choice="phys">Physical health</button><button data-choice="ment">Mental health</button><button data-choice="pol">Polarisation</button><button data-choice="ster">Stereotyping</button></span></div>
+    <div class="classify-item" data-answer="phys"><span class="term">Late-night use of social media disturbs sleep</span><span class="choices"><button data-choice="iso">Intellectual isolation</button><button data-choice="phys">Physical health</button><button data-choice="ment">Mental health</button><button data-choice="pol">Polarisation</button><button data-choice="ster">Stereotyping</button></span></div>
+    <div class="classify-item" data-answer="iso"><span class="term">Algorithms only show you content similar to what you already like</span><span class="choices"><button data-choice="iso">Intellectual isolation</button><button data-choice="phys">Physical health</button><button data-choice="ment">Mental health</button><button data-choice="pol">Polarisation</button><button data-choice="ster">Stereotyping</button></span></div>
+    <div class="classify-item" data-answer="ster"><span class="term">Sarcasm is lost online, so a joke is read as a serious comment</span><span class="choices"><button data-choice="iso">Intellectual isolation</button><button data-choice="phys">Physical health</button><button data-choice="ment">Mental health</button><button data-choice="pol">Polarisation</button><button data-choice="ster">Stereotyping</button></span></div>
+    <div class="classify-item" data-answer="ment"><span class="term">Constantly comparing yourself with other people's curated feeds lowers self-esteem</span><span class="choices"><button data-choice="iso">Intellectual isolation</button><button data-choice="phys">Physical health</button><button data-choice="ment">Mental health</button><button data-choice="pol">Polarisation</button><button data-choice="ster">Stereotyping</button></span></div>
+    <div class="classify-item" data-answer="ment"><span class="term">Fear of missing out makes users keep checking updates</span><span class="choices"><button data-choice="iso">Intellectual isolation</button><button data-choice="phys">Physical health</button><button data-choice="ment">Mental health</button><button data-choice="pol">Polarisation</button><button data-choice="ster">Stereotyping</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="1"><p class="q">1. Which service organises messages into threads and often uses moderators?</p><div class="opts"><button class="opt" data-idx="0">Microblog</button><button class="opt" data-idx="1">Forum</button><button class="opt" data-idx="2">Instant messaging</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What creates a filter bubble on a social network?</p><div class="opts"><button class="opt" data-idx="0">Algorithms showing content based on what the user already likes</button><button class="opt" data-idx="1">Moderators deleting posts</button><button class="opt" data-idx="2">Users having too many followers</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="2"><p class="q">3. Which of these best describes a microblog?</p><div class="opts"><button class="opt" data-idx="0">A long online journal shown newest first</button><button class="opt" data-idx="1">A private chat room that needs a passcode</button><button class="opt" data-idx="2">A platform for short posts with a character limit</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-impact">
+  <h2 class="section-title">The impact of IT <span class="tag">12.4</span></h2>
+  <p>IT has changed how almost every sector works. For each one, learn the specific technologies and what they let people or organisations do.</p>
+
+  <h3>Sports</h3>
+<div class="block">
+  <ul>
+    <li><strong>Referee assistance</strong> — technology such as VAR (video assistant referee) in football helps referees make accurate decisions during games</li>
+    <li><strong>Ticketing and access control</strong> — digital ticketing and efficient access control systems streamline fans' entry to sports venues</li>
+    <li><strong>Wearable tech</strong> — athletes use wearable devices such as fitness trackers to monitor their physical condition and performance in training</li>
+    <li><strong>Improved broadcasting</strong> — high-quality sports broadcasts and easy online streaming</li>
+    <li><strong>Fan experience in stadiums</strong> — interactive displays and better connectivity improve the in-stadium experience</li>
+    <li><strong>Virtual training and simulation</strong> — advanced simulation software helps with strategy planning and skill development</li>
+    <li><strong>Data management</strong> — managing vast amounts of sports data, including player statistics and team records</li>
+  </ul>
+</div>
+
+  <h3>Manufacturing</h3>
+<div class="block">
+  <ul>
+    <li><strong>Robotics</strong> — more robots for precision, speed and handling hazardous tasks</li>
+    <li><strong>3D printing</strong> — a valuable tool for rapid prototyping and for producing complex parts</li>
+    <li><strong>Real-time monitoring</strong> — tracking manufacturing processes in real time, for instant decisions and adjustments</li>
+    <li><strong>Automation</strong> — automating manufacturing processes increases efficiency and reduces human error</li>
+    <li><strong>AI in design</strong> — AI helps design more efficient and innovative products</li>
+    <li><strong>Cybersecurity</strong> — stronger measures protect sensitive manufacturing data and intellectual property</li>
+  </ul>
+</div>
+
+  <h3>Healthcare</h3>
+<div class="block">
+  <ul>
+    <li><strong>Remote monitoring devices</strong> — devices worn daily that keep track of a patient's vital signs, for example for diabetes, and alert the user and emergency contacts when a reading is too low or too high</li>
+    <li><strong>Artificial limbs</strong> — let people with disabilities or injuries use a limb again, or replace it completely, and live a fuller life</li>
+    <li><strong>Nanotechnology</strong> — nanobots can deliver medicine (for example in cancer treatment) precisely, avoiding and reducing unnecessary treatment reaching healthy cells</li>
+    <li><strong>AI chat support</strong> — helps patients navigate healthcare services and answers general queries</li>
+    <li><strong>Patient portals</strong> — online platforms to book and reschedule appointments and to keep track of medical records and prescriptions</li>
+  </ul>
+</div>
+
+  <h3>Education</h3>
+<div class="block">
+  <ul>
+    <li><strong>Interactive whiteboards</strong> — make presentations and notes more visually appealing and interactive</li>
+    <li><strong>E-books and digital libraries</strong> — soft copies of books (e-books) and audio books are easily available, making resources more accessible</li>
+    <li><strong>Educational video games</strong> — let learning happen from another perspective, making it more interesting</li>
+    <li><strong>Digital portfolios</strong> — let students upload tests and assignments and keep track of them</li>
+    <li><strong>Virtual classrooms</strong> — let learning happen anytime and anywhere in the world using video conferencing</li>
+  </ul>
+</div>
+
+  <h3>Banking</h3>
+<div class="block">
+  <ul>
+    <li><strong>ATMs</strong> — instant cash withdrawals and deposits and basic transactions without a bank teller</li>
+    <li><strong>Digital wallets</strong> — store payment information and make online and in-store payments easy</li>
+    <li><strong>E-statements</strong> — reduce paper use and provide instant account updates</li>
+    <li><strong>Online banking</strong> — manage accounts, transfer money and pay bills without visiting a bank</li>
+    <li><strong>Improved customer service</strong> — online 24/7 helplines help resolve issues without waiting for the weekend to pass</li>
+  </ul>
+</div>
+
+  <h3>E-business and finance</h3>
+  <p>Online businesses are now commonplace, and buying goods and services online is often seen as easier than going to a physical store. Goods and services are often cheaper online because businesses save on shop space and reduced utility bills. The main advantage is how quickly the customer receives products. Online shopping has become even more popular with smart devices, because apps let you order anything online from your phone, wherever you are. That is convenient when, say, you are out shopping and can't find the product in store but can order it straight away from the online store.</p>
+  <p>Online shopping can be better for the environment, because fewer vehicles may be used when people aren't driving to shops. But it is often difficult to judge the quality of products online or to check their size, so many products end up being returned, which may increase the number of vehicles used.</p>
+
+  <h3>News and media</h3>
+  <p>IT lets people access news stories from around the world quickly, and has made them more aware of world events. It has also let people become amateur journalists, recording events as they happen and using social media to broadcast them to a wider audience.</p>
+  <p>This has both positive and negative effects. It lets people see what happened at certain events when the media may have chosen to censor them. Others argue that it can be harmful, saying the media sometimes censor events because they believe it could be harmful for people to be fully aware of what happened.</p>
+  <p>People can also use IT to set up <strong>news feeds</strong> that draw stories from many different media sources. This saves time, because they don't need to visit each source and find the stories they want to read. They set their news interests and the software searches for stories it thinks will interest them.</p>
+
+  <h3>Family and home</h3>
+  <p>IT is used to control many aspects of the home, such as lighting and heating, and people can even use these systems remotely. This can save money and be better for the environment. Rather than having the heating on all day, or on a timer that starts at a set time, the user can choose to start the heating remotely at the precise time they are about to travel home.</p>
+  <p>IT is also built into many everyday devices in the home, such as washing machines and refrigerators — for example, showing how long a washing machine has left to finish washing clothes. These devices can also be a source of entertainment: families can gather to play games and quizzes on them, or stream music, which helps them interact and spend quality time together.</p>
+
+  <h3>Government and politics</h3>
+  <p>IT, especially social media, has become more prominent in government and politics. Social media is often used to raise awareness of political causes and issues, and many online petitions are set up every day asking people to sign in support of issues they care about.</p>
+  <p>Used this way, IT helps a government see what issues people have, which may help it prioritise what it discusses. It gives people a voice and can force the government to discuss issues they believe need resolving.</p>
+  <p>IT has also let governments make their services accessible online. For example, people may be able to pay taxes online and apply for documents such as a passport or driving licence. This is more convenient for people, and can save the government money because it needs fewer staff than if people had to meet face to face for these services.</p>
+
+  <h3>Monitoring and surveillance</h3>
+  <p>The use of IT for monitoring and surveillance has become very prominent. Many police authorities around the world use it to monitor possible criminal activity and to locate criminals after a crime.</p>
+  <p>One example is combining <strong>facial recognition software with CCTV footage</strong>. A criminal will often try to flee an area or country if they think they will be caught, perhaps by train or plane, and train stations and airports have a lot of CCTV footage. This footage can be scanned with facial recognition software to see whether the criminal passed through a station or took a particular train. This saves a lot of time, because previously a person would have had to watch hours of footage to spot the criminal.</p>
+  <p>More people are also adding CCTV technology to their homes. Special systems can monitor the area around a house, and if motion is detected the user gets an alert on their mobile phone and can view footage of their home instantly to see what or who caused it. Some systems let the user speak through a speaker, which may scare off someone planning to burgle the house.</p>
+  <p>People have also started to use surveillance in their vehicles. Insurance companies use dashboard cameras that start recording the driver's journey when the car is switched on, so that footage can show who was responsible in an accident.</p>
+  <p class="note">Some argue that these uses of IT are relatively unpoliced at present. Some people strongly object to an average person being able to record them walking down the street or past their home, believing it is an invasion of privacy and that greater laws and regulations are needed to govern this use.</p>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the technology described in each statement.</h4>
+  <div class="sub-q">
+    <label>a) Used in football to help referees make accurate decisions during games.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>VAR (video assistant referee)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Used in manufacturing for rapid prototyping and for producing complex parts.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>3D printing</div>
+    <div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) An online platform where patients book appointments and keep track of medical records and prescriptions.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Patient portal</div>
+    <div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Combined with facial recognition software to locate a criminal who has passed through a train station or airport.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>CCTV (footage)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which sector benefits from each use of IT.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="health"><span class="term">Nanobots deliver cancer medicine precisely to the affected cells</span><span class="choices"><button data-choice="sport">Sports</button><button data-choice="manu">Manufacturing</button><button data-choice="health">Healthcare</button><button data-choice="edu">Education</button><button data-choice="bank">Banking</button></span></div>
+    <div class="classify-item" data-answer="edu"><span class="term">Virtual classrooms let students learn using video conferencing</span><span class="choices"><button data-choice="sport">Sports</button><button data-choice="manu">Manufacturing</button><button data-choice="health">Healthcare</button><button data-choice="edu">Education</button><button data-choice="bank">Banking</button></span></div>
+    <div class="classify-item" data-answer="bank"><span class="term">E-statements reduce paper use and give instant account updates</span><span class="choices"><button data-choice="sport">Sports</button><button data-choice="manu">Manufacturing</button><button data-choice="health">Healthcare</button><button data-choice="edu">Education</button><button data-choice="bank">Banking</button></span></div>
+    <div class="classify-item" data-answer="manu"><span class="term">Real-time monitoring of production processes for instant adjustments</span><span class="choices"><button data-choice="sport">Sports</button><button data-choice="manu">Manufacturing</button><button data-choice="health">Healthcare</button><button data-choice="edu">Education</button><button data-choice="bank">Banking</button></span></div>
+    <div class="classify-item" data-answer="sport"><span class="term">Wearable fitness trackers monitor an athlete's condition in training</span><span class="choices"><button data-choice="sport">Sports</button><button data-choice="manu">Manufacturing</button><button data-choice="health">Healthcare</button><button data-choice="edu">Education</button><button data-choice="bank">Banking</button></span></div>
+    <div class="classify-item" data-answer="sport"><span class="term">Digital ticketing and access control speed up entry to venues</span><span class="choices"><button data-choice="sport">Sports</button><button data-choice="manu">Manufacturing</button><button data-choice="health">Healthcare</button><button data-choice="edu">Education</button><button data-choice="bank">Banking</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. How can IT make heating a home cheaper and better for the environment?</p><div class="opts"><button class="opt" data-idx="0">The heating is started remotely just before the user travels home</button><button class="opt" data-idx="1">The heating is left on a fixed timer all day</button><button class="opt" data-idx="2">The heating is only used at weekends</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">2. Why might online shopping increase vehicle use?</p><div class="opts"><button class="opt" data-idx="0">Shops need more parking</button><button class="opt" data-idx="1">Customers can't easily judge quality or size, so many products are returned</button><button class="opt" data-idx="2">Goods are always cheaper online</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="2"><p class="q">3. What is the main privacy argument against people recording others with cameras and CCTV?</p><div class="opts"><button class="opt" data-idx="0">It is too expensive</button><button class="opt" data-idx="1">It doesn't work at night</button><button class="opt" data-idx="2">It can invade people's privacy, and is relatively unpoliced</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-learning">
+  <h2 class="section-title">Technology-enhanced learning <span class="tag">12.5</span></h2>
+  <p>Technology-enhanced learning covers the ways computers and the internet are used to deliver teaching and let people learn. For each method, know what it is, its advantages and its disadvantages.</p>
+
+  <h3>Computer-based training (CBT)</h3>
+<div class="block">
+  <ul>
+    <li>A learning method that uses computers to deliver educational content</li>
+    <li>Allows self-paced learning without a tutor, making it flexible and independent</li>
+    <li>Resources are a mixture of multimedia elements such as audio, video and text, which makes learning more effective</li>
+    <li>Training is usually delivered in small, manageable chunks, which supports step-by-step learning</li>
+    <li>Tests and assignments are included and are marked automatically, so progress can be tracked</li>
+    <li>Learners can revisit content as many times as they need</li>
+    <li>Content is delivered in a standardised way, giving all users a consistent learning experience</li>
+    <li>Learning can take place virtually, from anywhere in the world</li>
+  </ul>
+</div>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Users can learn at their own pace</li><li>Different media can be used to create an interesting set of resources</li><li>Staff can improve their skills and knowledge, which can lead to promotion or additional pay</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Learners may not have a tutor to answer their questions</li><li>Staff may not be motivated to follow the training because nobody is watching and driving them to do so</li><li>Learners need complete focus and good discipline to finish the course, and may lose motivation</li><li>It is not as engaging as in-person classroom learning, which can make it boring and reduce motivation</li></ul></div>
+</div>
+
+  <h3>Online tutorials</h3>
+<div class="block">
+  <ul>
+    <li>Digital guides that teach viewers how to complete or achieve a specific goal or task</li>
+    <li>Can be delivered using different media: text, video tutorials, audio tutorials and so on</li>
+    <li>Users learn at their own pace and in their own time</li>
+    <li>Users can view a tutorial repeatedly, as often as they like</li>
+    <li>Can be accessed from anywhere with an internet connection, which is convenient and cost-effective</li>
+    <li>A diverse range of tutorials covers topics such as baking, cleaning and coding</li>
+  </ul>
+</div>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Students can reach teachers and tutors they otherwise couldn't, giving a greater range of expertise to draw on</li><li>Students can study as and when they wish</li><li>Students and teachers don't have to be online at the same time, so there are fewer time constraints</li><li>No need to travel, so there are no geographical constraints on where students study or take courses</li><li>Students can share their studies, ideas and learning with a group without being physically together or needing a teacher present</li><li>Tutorials can be recorded, accessed at any time and replayed to review work</li><li>Material can be studied in any order, so students choose what they study</li><li>Students get instant feedback from periodic pre-set tests or tasks</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>A reliable internet connection and a suitable computing device are needed, so a digital divide has to be overcome</li><li>A tutorial may not be at the right level for an individual student, who may then be disadvantaged</li><li>Without a teacher, students may lose motivation or miss important material</li><li>Teacher feedback may not be fast enough to resolve problems with the studies or tasks</li></ul></div>
+</div>
+
+  <h3>Networked courses</h3>
+<div class="block">
+  <ul>
+    <li>A form of online collaborative learning that connects learners with other learners and with their tutors</li>
+    <li>Designed to help learners build relationships with each other and with their tutors</li>
+    <li>Helps learning, because several different people can give feedback in the discussion</li>
+    <li>Mixes live sessions with self-paced learning activities</li>
+    <li>Classes take place in virtual environments, allowing real-time interaction between tutors and learners</li>
+    <li>Time scales are more limited, because learners tend to work at the same pace so they can exchange useful feedback and comments</li>
+    <li>Learners and tutors can join from anywhere in the world, giving global participation</li>
+  </ul>
+</div>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Learners work with other learners and build relationships they can take forward beyond the course</li><li>Learners both gain and give feedback, so they build new skills and knowledge and offer their own to others</li><li>Learners may be more motivated to complete tasks because other people's learning depends on them</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Some learners find it difficult to contribute because they aren't sure what feedback to give</li><li>Some learners may dominate every discussion, not leaving room for others to contribute, and tutors may find them difficult to manage</li><li>Learners may only give positive feedback because they don't feel comfortable criticising others' work</li><li>If some learners don't complete tasks or give feedback, it can limit the learning of others because time scales are tight</li></ul></div>
+</div>
+
+  <h3>Massive Open Online Courses (MOOCs)</h3>
+<div class="block">
+  <ul>
+    <li>Large-scale, free or affordable online courses that anyone on the internet can join</li>
+    <li>Cover a diverse range of topics and often give a certificate on completion</li>
+    <li>Offer flexible learning for professional skills development or personal interest</li>
+    <li>Include filmed lectures and other resources such as reading material</li>
+    <li>Many also provide interactive user forums</li>
+    <li>Progress is easy to track through assignments and tests that are marked automatically or reviewed by peers</li>
+  </ul>
+</div>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Can be organised anywhere and at any time, as long as there is connectivity</li><li>Can use global resources</li><li>Can be in any language, to reflect students' first languages</li><li>Can use any online tools available or known to students in the region</li><li>Can use peer review, with no exam pressure</li><li>Time zones and physical boundaries can be ignored</li><li>Can be organised quickly, as soon as students are informed</li><li>Learning can be in informal surroundings, so students are more relaxed</li><li>Reduces costs to the college</li><li>There are no other students to distract the learner</li><li>Cross-discipline learning is easier</li><li>Learning can continue beyond the formal time scale of the course, encouraging active learning beyond course requirements</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Students who are not digitally literate can't fully take part or make use of the course materials</li><li>User-generated course materials may devalue or undermine the validity of the course</li><li>Students who can't self-motivate or set their own goals can't fully take part</li><li>Language barriers and translations may exclude or disadvantage some participants</li><li>Very large amounts of content are difficult to navigate, set up and work through without guidance</li><li>Practical experience and training are limited, as are resources for practical work</li><li>Some students may not be able or prepared to devote the time and effort the course needs</li></ul></div>
+</div>
+
+  <h3>Video conferencing</h3>
+<div class="block">
+  <ul>
+    <li>People communicate using computers, displaying a video stream over an internet connection</li>
+    <li>Allows real-time conversations</li>
+    <li>Sessions can be recorded for later viewing or reference</li>
+    <li>Many people can join from anywhere in the world</li>
+    <li>A user can share the content on their screen with the other people in the conference</li>
+    <li>Video quality depends on the conferencing software and the internet connection, so it is not consistent</li>
+    <li>Only a limited number of people can join, because lesson quality can drop with connectivity and other technical issues</li>
+    <li>The software supports both voice and text-based communication</li>
+  </ul>
+</div>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Learners can ask questions in real time, which may improve their learning and understanding</li><li>Learners can see and hear their educator, which may feel like a personal learning experience and increase motivation because it is more engaging</li><li>The educator can often share their screen with learners, which is useful for a demonstration</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Video conferencing software can need high broadband speeds that may not be available in some areas</li><li>Only a small number of learners can take part, limited by the software and the connection, which may leave some people waiting a long time for a place on a course</li></ul></div>
+</div>
+
+  <h3>Impact on student achievement and motivation</h3>
+  <p>This can be asked as an 8-mark question, for example on the impact of computer-based training. The same points, and more, can be used for the impact on student achievement, learner autonomy and teacher motivation.</p>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Positive impacts</p><ul><li>Training is more accessible, available when and where it suits the student, at any time</li><li>Small amounts of information delivered step by step prompt learners to respond to a lesson at intervals or take brief tests regularly</li><li>Regular, instant or quicker feedback on responses and overall progress increases engagement, achievement and retention of knowledge and skills</li><li>Learners can take courses at their own pace, without pressure to keep up with or wait for their peers</li><li>Sets learning prerequisites for moving on to the next lesson, section or topic</li><li>Progress can be tracked more accurately and individual targets set</li><li>Course information is easily available and can be retrieved later for reference</li></ul></div>
+  <div class="pc con"><p class="pc-title">Negative impacts</p><ul><li>Reduced human interaction with teachers or instructors makes discussion more difficult</li><li>Reduced human interaction with fellow learners means less group work, discussion and mutual assistance</li><li>Teachers or instructors may not always be available when students need help</li><li>Learners with low motivation will fall behind in their studies</li><li>Without class discussion, some students may be confused or not fully understand</li><li>Slow or poor internet connections, older devices or power fluctuations may not allow easy access to course materials</li></ul></div>
+</div>
+
+  <h3>Impact on teachers' motivation</h3>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Positive impacts</p><ul><li>Digital tools make teaching more creative and fun</li><li>Teachers can keep learning new things online</li><li>Teaching can be more flexible</li><li>Online classes can have more students</li><li>Fast feedback helps teachers improve</li><li>Teachers can work with others worldwide and share resources and learning methods</li></ul></div>
+  <div class="pc con"><p class="pc-title">Negative impacts</p><ul><li>Dealing with technology can be hard</li><li>Online teaching means extra preparation</li><li>Not seeing students in person can be tough</li><li>Keeping students interested online is challenging</li><li>Worrying about students' tech problems</li><li>Checking students' work online can be difficult</li></ul></div>
+</div>
+
+<div class="task" data-task="points" data-points="8">
+  <p class="task-label"><span>Extended answer</span><span class="pts">8 points</span></p>
+  <h4>Discuss the impact of computer-based training on student achievement and motivation. (8 marks)</h4>
+  <div class="sub-q mp" data-max="8">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 8)</span>
+      <label class="mp-item"><input type="checkbox"><span>Training is accessible when and where it suits the student, at any time</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Small chunks of information step by step prompt regular responses or brief tests</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Regular, instant feedback increases engagement, achievement and retention</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Students work at their own pace, with no pressure to keep up with or wait for peers</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Sets prerequisites that must be met before moving on to the next section</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Progress can be tracked accurately and individual targets set</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Course information can be retrieved later for reference</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Reduced interaction with teachers makes discussion harder</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Reduced interaction with other students means less group work and mutual help</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Teachers may not be available when students need help</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Students with low motivation fall behind</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Without class discussion some students don't fully understand</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Slow or poor connections, older devices or power fluctuations limit access</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 8 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the method of technology-enhanced learning that each statement describes.</h4>
+  <div class="sub-q">
+    <label>a) Large-scale, free or affordable online courses that anyone can join, often with filmed lectures and interactive forums.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>MOOC (massive open online course)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Mixes live sessions with self-paced activities and connects learners with other learners and their tutors.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Networked course</div>
+    <div class="self-mark"><input type="checkbox" id="sm-18"><label for="sm-18">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Delivers content in small chunks, with tests and assignments that are marked automatically.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Computer-based training (CBT)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-19"><label for="sm-19">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Real-time conversation with video streams, where a user can share the content on their screen.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Video conferencing</div>
+    <div class="self-mark"><input type="checkbox" id="sm-20"><label for="sm-20">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click whether each statement is an advantage or a disadvantage of technology-enhanced learning.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="adv"><span class="term">Learners may be more motivated because other learners depend on their contributions</span><span class="choices"><button data-choice="adv">Advantage</button><button data-choice="dis">Disadvantage</button></span></div>
+    <div class="classify-item" data-answer="adv"><span class="term">Learners can work at their own pace</span><span class="choices"><button data-choice="adv">Advantage</button><button data-choice="dis">Disadvantage</button></span></div>
+    <div class="classify-item" data-answer="dis"><span class="term">Learners may not have a tutor to answer their questions</span><span class="choices"><button data-choice="adv">Advantage</button><button data-choice="dis">Disadvantage</button></span></div>
+    <div class="classify-item" data-answer="adv"><span class="term">Sessions can be recorded and replayed to review work</span><span class="choices"><button data-choice="adv">Advantage</button><button data-choice="dis">Disadvantage</button></span></div>
+    <div class="classify-item" data-answer="dis"><span class="term">A reliable internet connection and suitable device are needed (the digital divide)</span><span class="choices"><button data-choice="adv">Advantage</button><button data-choice="dis">Disadvantage</button></span></div>
+    <div class="classify-item" data-answer="dis"><span class="term">Only a small number of learners can join a video conference</span><span class="choices"><button data-choice="adv">Advantage</button><button data-choice="dis">Disadvantage</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="1"><p class="q">1. Which method mixes live sessions with self-paced activities and lets learners give each other feedback?</p><div class="opts"><button class="opt" data-idx="0">MOOC</button><button class="opt" data-idx="1">Networked course</button><button class="opt" data-idx="2">Online tutorial</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What is the "digital divide" in online learning?</p><div class="opts"><button class="opt" data-idx="0">The gap between people who have the devices and internet access needed and those who don't</button><button class="opt" data-idx="1">The gap between live and recorded lessons</button><button class="opt" data-idx="2">The difference between text and video tutorials</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="2"><p class="q">3. Which advantage is specific to video conferencing?</p><div class="opts"><button class="opt" data-idx="0">Marking is fully automatic</button><button class="opt" data-idx="1">Courses are always free</button><button class="opt" data-idx="2">Learners can ask questions in real time and see and hear the educator</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · IT in Society — built for revision, points are just for you.
+</footer>
+
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  // ---- Centralised vs decentralised demo (bonus, non-scored) ----
+  const central = document.getElementById('net-central');
+  const p2p = document.getElementById('net-p2p');
+  const netCaption = document.getElementById('net-caption');
+  const netToggle = document.getElementById('toggle-net');
+  let isP2P = false;
+
+  netToggle.addEventListener('click', function(){
+    isP2P = !isP2P;
+    central.style.display = isP2P ? 'none' : 'block';
+    p2p.style.display = isP2P ? 'block' : 'none';
+    netCaption.textContent = isP2P
+      ? 'Decentralised — users pay each other directly; a shared ledger (e.g. blockchain) records every transaction'
+      : 'Centralised — every payment passes through one central body, such as a bank';
+    netToggle.textContent = isP2P ? 'Show centralised →' : 'Show decentralised →';
+  });
+})();
+  (function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full — fail silently */ }
+  }
+
+  var subQs      = Array.prototype.slice.call(document.querySelectorAll('.task[data-task="open"] .sub-q'));
+  var classifyIt = Array.prototype.slice.call(document.querySelectorAll('.classify-item'));
+  var mcqs       = Array.prototype.slice.call(document.querySelectorAll('.mcq'));
+  var orderTasks = Array.prototype.slice.call(document.querySelectorAll('.task[data-task="order"]'));
+  var selectTasks= Array.prototype.slice.call(document.querySelectorAll('.task[data-task="select"]'));
+
+  // ---- SAVE: listen alongside the page's own handlers ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  classifyIt.forEach(function(item, i){
+    var buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    var opts = mcq.querySelectorAll('.opt');
+    opts.forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  orderTasks.forEach(function(task, ti){
+    var items = task.querySelectorAll('.order-item');
+    items.forEach(function(item){
+      item.addEventListener('click', function(){
+        save(function(s){
+          var key = 'order-' + ti;
+          s[key] = s[key] || [];
+          s[key].push(item.dataset.order);
+        });
+      });
+    });
+  });
+
+  selectTasks.forEach(function(task, ti){
+    var btn = task.querySelector('.check-select-btn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var items = Array.prototype.slice.call(task.querySelectorAll('.select-item input'));
+      var checkedIdx = [];
+      items.forEach(function(inp, ii){ if(inp.checked) checkedIdx.push(ii); });
+      save(function(s){ s['select-' + ti] = checkedIdx; });
+    });
+  });
+
+  // ---- RESTORE: replay stored answers as real clicks, so the page's
+  // own scoring logic runs exactly as it did originally ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+
+    orderTasks.forEach(function(task, ti){
+      var seq = s['order-' + ti];
+      if(!seq) return;
+      seq.forEach(function(orderVal){
+        var items = task.querySelectorAll('.order-item');
+        for(var j = 0; j < items.length; j++){
+          if(items[j].dataset.order === orderVal && !items[j].disabled){
+            items[j].click();
+            break;
+          }
+        }
+      });
+    });
+
+    selectTasks.forEach(function(task, ti){
+      var idxArr = s['select-' + ti];
+      if(!idxArr) return;
+      var items = Array.prototype.slice.call(task.querySelectorAll('.select-item input'));
+      idxArr.forEach(function(ii){ if(items[ii]) items[ii].checked = true; });
+      var btn = task.querySelector('.check-select-btn');
+      if(btn) btn.click();
+    });
+  })();
+
+  // ---- Small "reset my answers" control ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:transparent;border:1px solid #496354;'
+    + 'color:#a9a294;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e9e4d6'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#a9a294'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this page?')){
+      localStorage.removeItem(STORE_KEY);
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
