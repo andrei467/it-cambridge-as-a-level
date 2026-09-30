@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>New and Emerging Technologies — Flashcards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1220;--bg-raised:#141b2e;--bg-deep:#090d18;--trace:#40557d;--trace-dim:#212b45;--paper:#e7e9f1;--paper-dim:#9ba4bc;--signal:#45b8cf;--signal-bright:#7fd9ea;--gold:#e6b85c;--brick:#e0685c;--sage:#86c9a0;--mono:'JetBrains Mono',ui-monospace,monospace;--serif:'Source Serif 4',Georgia,serif;--radius:3px;}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;min-height:100vh;background:var(--bg);background-image:linear-gradient(var(--trace-dim) 1px,transparent 1px),linear-gradient(90deg,var(--trace-dim) 1px,transparent 1px);background-size:42px 42px;color:var(--paper);font-family:var(--serif);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);}
+.wrap{max-width:640px;margin:0 auto;padding:0 24px 90px;}
+
+nav.theory-nav{max-width:640px;margin:0 auto;padding:14px 24px 0;display:flex;justify-content:space-between;gap:12px;}
+nav.theory-nav a{font-family:var(--mono);font-size:12.5px;text-decoration:none;color:var(--paper-dim);border:1px solid var(--trace);padding:8px 13px;border-radius:var(--radius);display:inline-flex;align-items:center;gap:6px;}
+nav.theory-nav a:hover{color:var(--paper);border-color:var(--paper-dim);}
+nav.theory-nav a.disabled{opacity:.4;pointer-events:none;}
+@media (max-width:600px){nav.theory-nav a span.full{display:none;}}
+
+header.hero{padding:36px 24px 26px;max-width:640px;margin:0 auto;border-bottom:1px solid var(--trace);}
+.kicker{font-family:var(--mono);font-size:13px;color:var(--sage);margin:0 0 10px;}
+h1.title{font-family:var(--mono);font-weight:700;font-size:clamp(22px,5vw,32px);margin:0 0 12px;color:var(--paper);}
+.hero p{color:var(--paper-dim);max-width:56ch;margin:0;font-size:16.5px;}
+
+.controls{max-width:640px;margin:0 auto;padding:18px 24px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+.controls .left{display:flex;gap:8px;flex-wrap:wrap;}
+button.ctl{font-family:var(--mono);font-size:12.5px;background:transparent;border:1px solid var(--trace);color:var(--paper-dim);padding:8px 13px;border-radius:var(--radius);cursor:pointer;}
+button.ctl:hover{color:var(--paper);border-color:var(--paper-dim);}
+button.ctl.active{background:var(--signal);color:#04141a;border-color:var(--signal);font-weight:500;}
+
+.progress-row{max-width:640px;margin:14px auto 0;padding:0 24px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;color:var(--paper-dim);}
+.progress-bar{flex:1;height:6px;background:var(--trace-dim);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--sage);width:0%;transition:width .3s ease;}
+.progress-count{white-space:nowrap;}
+.progress-count .n{color:var(--gold);font-weight:700;}
+
+.stage{max-width:640px;margin:26px auto 0;padding:0 24px;}
+.topic-tag{font-family:var(--mono);font-size:12px;color:var(--signal-bright);border:1px solid var(--trace);display:inline-block;padding:3px 9px;border-radius:var(--radius);margin-bottom:14px;}
+
+.card-scene{perspective:1400px;}
+.card{
+  position:relative;min-height:230px;border-radius:6px;cursor:pointer;
+  transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.3,1);
+}
+.card.flipped{transform:rotateY(180deg);}
+.card-face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:6px;
+  border:1px solid var(--trace);background:var(--bg-raised);
+  padding:28px 26px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+}
+.card-face .face-label{font-family:var(--mono);font-size:11px;color:var(--paper-dim);position:absolute;top:14px;left:16px;}
+.card-face .face-text{font-size:19px;line-height:1.5;color:var(--paper);}
+.card-face.front{border-left:3px solid var(--signal);}
+.card-face.back{border-left:3px solid var(--sage);transform:rotateY(180deg);background:rgba(134,201,160,.06);}
+.card-face .hint{position:absolute;bottom:14px;right:16px;font-family:var(--mono);font-size:11px;color:var(--paper-dim);}
+@media (prefers-reduced-motion:reduce){.card{transition:none;}}
+
+.judge-row{display:flex;gap:10px;margin-top:18px;}
+button.judge{flex:1;font-family:var(--mono);font-size:13.5px;padding:13px 10px;border-radius:var(--radius);border:1px solid var(--trace);background:transparent;color:var(--paper);cursor:pointer;font-weight:500;}
+button.judge:hover{border-color:var(--paper-dim);}
+button.still{color:var(--brick);}
+button.still:hover{border-color:var(--brick);background:rgba(224,104,92,.08);}
+button.know{color:var(--sage);}
+button.know:hover{border-color:var(--sage);background:rgba(134,201,160,.08);}
+button.judge:disabled{opacity:.35;cursor:default;background:transparent !important;border-color:var(--trace) !important;}
+
+.done-panel{max-width:640px;margin:26px auto 0;padding:0 24px;text-align:center;}
+.done-box{border:1px solid var(--sage);border-radius:6px;background:rgba(134,201,160,.08);padding:34px 26px;}
+.done-box h2{font-family:var(--mono);color:var(--sage);font-size:22px;margin:0 0 10px;}
+.done-box p{color:var(--paper-dim);margin:0 0 18px;}
+.done-box button.ctl{background:var(--signal);color:#04141a;border-color:var(--signal);font-weight:500;}
+
+footer{max-width:640px;margin:36px auto 0;padding:0 24px;font-family:var(--mono);font-size:12px;color:var(--paper-dim);}
+
+@media (max-width:600px){
+  body{font-size:16px;}
+  header.hero{padding:30px 20px 22px;}
+  .card{min-height:210px;}
+  .card-face{padding:24px 20px;}
+  .card-face .face-text{font-size:17.5px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="theory-nav">
+  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · 13.1 Flashcards</p>
+  <h1 class="title">New and Emerging Technologies</h1>
+  <p>Every fact from the New and Emerging Technologies page, one card at a time. Tap a card to flip it, then say whether you knew it. Cards you’re still learning come back later in the deck.</p>
+</header>
+
+<div class="controls">
+  <div class="left">
+    <button class="ctl" id="btn-shuffle">Shuffle</button>
+    <button class="ctl" id="btn-reset">Reset progress</button>
+  </div>
+</div>
+
+<div class="progress-row">
+  <span class="progress-count">Mastered <span class="n" id="mastered-count">0</span> / <span id="total-count">0</span></span>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<div class="stage" id="stage">
+  <span class="topic-tag" id="topic-tag"></span>
+  <div class="card-scene">
+    <div class="card" id="card">
+      <div class="card-face front">
+        <span class="face-label">Question</span>
+        <p class="face-text" id="front-text"></p>
+        <span class="hint">Tap to flip</span>
+      </div>
+      <div class="card-face back">
+        <span class="face-label">Answer</span>
+        <p class="face-text" id="back-text"></p>
+        <span class="hint">Tap to flip back</span>
+      </div>
+    </div>
+  </div>
+  <div class="judge-row">
+    <button class="judge still" id="btn-still" disabled>Still learning</button>
+    <button class="judge know" id="btn-know" disabled>I know this</button>
+  </div>
+</div>
+
+<div class="done-panel" id="done-panel" style="display:none;">
+  <div class="done-box">
+    <h2>All cards mastered</h2>
+    <p>You’ve marked every card as known. Shuffle to go again, or reset to start from scratch.</p>
+    <button class="ctl" id="btn-again">Go again</button>
+  </div>
+</div>
+
+<footer>Cambridge AS &amp; A Level IT · New and Emerging Technologies flashcards — progress is saved on this device only.</footer>
+
+<script>
+const ALL_CARDS = [{"topic": "AI", "front": "What does AI enable a computer to do?", "back": "Behave as a human would: react to input, make decisions, learn and solve problems."}, {"topic": "AI", "front": "What are machine learning algorithms?", "back": "Algorithms that let an AI system develop its own knowledge from a knowledge base, learning what counts as a ‘correct’ or ‘wrong’ response."}, {"topic": "AI", "front": "Give an advantage of AI over a human.", "back": "It is more precise and accurate than a human."}, {"topic": "AI", "front": "Why can AI work more than a human can?", "back": "It works 24/7, with no need for rest."}, {"topic": "AI", "front": "Give a data-related advantage of AI.", "back": "It can analyse large data sets quickly."}, {"topic": "AI", "front": "Give a cost-related disadvantage of AI.", "back": "It is expensive and needs skilled people to program."}, {"topic": "AI", "front": "Give a storage-related disadvantage of AI.", "back": "It needs large, costly storage."}, {"topic": "AI", "front": "Give an ethical disadvantage of AI.", "back": "It raises ethical or moral issues, and has limited creativity."}, {"topic": "Autonomous transport", "front": "What three technologies let a self-driving car navigate?", "back": "AI, GPS and sensors."}, {"topic": "Autonomous transport", "front": "What do the sensors on an autonomous train control?", "back": "Speed, location, distance and doors."}, {"topic": "Autonomous transport", "front": "Give a disadvantage of autonomous trains over cars.", "back": "They can’t react to an unexpected problem, such as a stuck door, and can’t reassure passengers the way a human driver can."}, {"topic": "Autonomous transport", "front": "Give an advantage of self-driving cars.", "back": "They remove the emotional reactions and tiredness that cause accidents."}, {"topic": "Augmented reality", "front": "What does augmented reality do?", "back": "Overlays computer-generated images (text, audio, animation, video) onto the real world, using a camera and sensors, then a display merges the two."}, {"topic": "Augmented reality", "front": "Give three uses of augmented reality.", "back": "Retail (seeing furniture or clothes at home), gaming (e.g. Pokémon GO), and surgery."}, {"topic": "Augmented reality", "front": "How can AR help a surgeon during an operation?", "back": "Smart glasses can show patient records, scans and vital signs without the surgeon looking away."}, {"topic": "Virtual reality", "front": "What does virtual reality do?", "back": "Immerses a person in a fully computer-generated 3D reality, usually through a headset with a display and headphones; gloves or special shoes can add extra input."}, {"topic": "Virtual reality", "front": "Give four uses of virtual reality.", "back": "Gaming, industry (virtual meetings, surgical training), scientific research (modelling molecules), and tourism (visiting places virtually)."}, {"topic": "Virtual reality", "front": "What might a surgeon use VR for before a real operation?", "back": "Training and practising without risk to a patient."}, {"topic": "Robotics", "front": "How does a robot automatically perform a task?", "back": "By combining microprocessors and sensors: the sensors provide data, the microprocessor analyses it and sends output signals to control the robot."}, {"topic": "Robotics", "front": "Which company introduced robots into industry, and when?", "back": "General Motors, in the 1960s, to move the parts needed to assemble cars."}, {"topic": "Robotics", "front": "Give an advantage of using robots for repetitive or dangerous tasks.", "back": "They can handle repetitive or dangerous tasks that would be unsafe or tedious for humans."}, {"topic": "Robotics", "front": "Give an advantage of robots working non-stop.", "back": "They can work non-stop, with fewer errors than a human."}, {"topic": "Robotics", "front": "How can robots improve over time?", "back": "By pairing with AI to improve."}, {"topic": "Robotics", "front": "Give an employment-related disadvantage of robotics.", "back": "Robots can cause unemployment."}, {"topic": "Robotics", "front": "Give an emotional disadvantage of robotics.", "back": "Robots have no emotional response."}, {"topic": "Robotics", "front": "Give a maintenance-related disadvantage of robotics.", "back": "They need constant power and skilled maintenance."}, {"topic": "Translation", "front": "How does computer-assisted translation software work?", "back": "It matches words in a database and applies grammar rules."}, {"topic": "Translation", "front": "What can translation software fail to recognise?", "back": "Slang or local (colloquial) phrases."}, {"topic": "Translation", "front": "Give two uses of translation software.", "back": "Helping international business and meetings, and translating foreign-language websites in a browser."}, {"topic": "Translation", "front": "Give an advantage of translation software.", "back": "It gives instant access to a translation of a document."}, {"topic": "Translation", "front": "Give a disadvantage of translation software.", "back": "A user who doesn’t know the language can’t tell whether the translation is 100% correct."}, {"topic": "Holographic imaging", "front": "What is a hologram, and how is it usually created?", "back": "A 3D image, usually created by splitting a laser beam off mirrors and merging the beams again."}, {"topic": "Holographic imaging", "front": "Give two uses of holograms.", "back": "Security (hard to forge, e.g. credit cards, currency, passports) and architecture (showing clients what a building will look like)."}, {"topic": "Holographic imaging", "front": "Why are holograms useful for security?", "back": "They are difficult to forge or copy, making it harder for criminals to produce fake documents."}, {"topic": "Holographic imaging", "front": "Give a limitation of using holograms for security.", "back": "3D projected holograms need expensive equipment."}, {"topic": "Holographic storage", "front": "How is data stored in holographic (4th generation optical) storage?", "back": "Laser beams are split and bounced off mirrors onto a crystal, storing a hologram."}, {"topic": "Holographic storage", "front": "About how much data can one crystal (about the size of a grain of sugar) hold?", "back": "Around 1 terabyte."}, {"topic": "Holographic storage", "front": "What is the current limitation of holographic storage?", "back": "It is very new and expensive; current holograms can only store around 300 gigabytes of usable data."}, {"topic": "Holographic storage", "front": "Why is holographic storage attractive for very large data centres?", "back": "It takes up very little physical space compared with traditional storage."}, {"topic": "3D printing", "front": "What model does a 3D printer build a physical object from?", "back": "A CAD (computer aided design) model."}, {"topic": "3D printing", "front": "How does a 3D printer build an object?", "back": "By printing many thin layers of material, such as plastic, metal or concrete."}, {"topic": "3D printing", "front": "What is bio-printing?", "back": "3D printing of tissue and organs."}, {"topic": "3D printing", "front": "Give three uses of 3D printing.", "back": "Dentistry, prosthetics and medical tools (also housing, replacement parts and jewellery)."}, {"topic": "3D printing", "front": "Give an advantage of 3D printing.", "back": "It is fast, consistent and cheaper per item, and flexible with complex designs."}, {"topic": "3D printing", "front": "Give a disadvantage of 3D printing.", "back": "It can be used to make counterfeit or dangerous items."}, {"topic": "3D printing", "front": "Give an environmental disadvantage of 3D printing.", "back": "It is still limited to small items, is power-hungry, and produces plastic waste."}, {"topic": "Vision enhancement", "front": "How does night vision work?", "back": "It collects and amplifies available light to create a visible, often green, image."}, {"topic": "Vision enhancement", "front": "How does thermal vision work?", "back": "It detects infrared light (heat) given off by people, animals and fires."}, {"topic": "Vision enhancement", "front": "Which type of vision enhancement is used to search a collapsed building?", "back": "Thermal vision, because it detects the heat given off by a person’s body against a cold background."}, {"topic": "Wearable computing", "front": "What is wearable computing?", "back": "Devices worn on the body, such as smart watches, fitness trackers, glasses and headsets, that record data like heart rate, steps and blood pressure."}, {"topic": "Wearable computing", "front": "Give two uses of wearable computing.", "back": "Employee reward schemes and patient monitoring."}, {"topic": "Wearable computing", "front": "How can wearable computing help in a medical emergency?", "back": "It can send an alert instantly to a medical professional or family member, which could save the person’s life."}, {"topic": "Wearable computing", "front": "Give an accuracy-related disadvantage of wearable computing.", "back": "Accuracy can be poor, because devices are designed for the ‘average’ person."}, {"topic": "Wearable computing", "front": "Give a wellbeing-related disadvantage of wearable computing.", "back": "Users may become anxious or obsessed by constantly seeing their statistics."}, {"topic": "Wearable computing", "front": "Give a privacy-related disadvantage of wearable computing.", "back": "Data security and privacy could be a concern, for example if data is used for marketing."}, {"topic": "Blockchain", "front": "What does each block in a blockchain store?", "back": "A transaction, plus a hashed image of the block before it."}, {"topic": "Blockchain", "front": "Why is it very difficult to change a single block in a blockchain?", "back": "Each block contains a hashed image of the previous block, so altering one block breaks the chain."}, {"topic": "Blockchain", "front": "What is blockchain widely used for?", "back": "Cryptocurrency."}, {"topic": "Blockchain", "front": "Give a disadvantage of blockchain.", "back": "Processing and storing transactions needs a lot of computing power and energy."}, {"topic": "Internet of Things", "front": "What does the Internet of Things (IoT) do?", "back": "Connects everyday devices to the internet so they can share data with each other and automate tasks."}, {"topic": "Internet of Things", "front": "Give a way the IoT can support independent living.", "back": "Automatic shopping orders, voice-activated doors, or health alerts."}, {"topic": "Internet of Things", "front": "Give an advantage of the IoT.", "back": "It shares data across devices and automates tasks, which can also help the environment through efficiency."}, {"topic": "Internet of Things", "front": "Give a risk of connecting devices such as microphones or webcams to the IoT.", "back": "They could be hacked, letting someone control or spy on the house."}, {"topic": "Internet of Things", "front": "Give a cost-related disadvantage of the IoT.", "back": "Devices are expensive, and data from them could be wrong or faked."}, {"topic": "Molecular storage", "front": "How does molecular data storage work?", "back": "It stores data in molecules, the way the body does in DNA."}, {"topic": "Molecular storage", "front": "What conditions does molecular storage need?", "back": "Very cold temperatures, such as liquid nitrogen or helium, around −200°C."}, {"topic": "Molecular storage", "front": "How dense is molecular storage?", "back": "Extremely dense: around 25,000 gigabytes could fit in about 2 cm²."}, {"topic": "Molecular storage", "front": "Give a disadvantage of molecular storage.", "back": "The cooling liquids can be dangerous to humans if spilled."}];
+
+(function(){
+  const STORE_KEY = 'as-a-level-it-flashcards::emerging-tech';
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(state){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    catch(e){ /* storage unavailable */ }
+  }
+
+  const cardEl = document.getElementById('card');
+  const frontText = document.getElementById('front-text');
+  const backText = document.getElementById('back-text');
+  const topicTag = document.getElementById('topic-tag');
+  const stillBtn = document.getElementById('btn-still');
+  const knowBtn = document.getElementById('btn-know');
+  const shuffleBtn = document.getElementById('btn-shuffle');
+  const resetBtn = document.getElementById('btn-reset');
+  const againBtn = document.getElementById('btn-again');
+  const stage = document.getElementById('stage');
+  const donePanel = document.getElementById('done-panel');
+  const masteredCountEl = document.getElementById('mastered-count');
+  const totalCountEl = document.getElementById('total-count');
+  const progressFill = document.getElementById('progress-fill');
+
+  totalCountEl.textContent = ALL_CARDS.length;
+
+  function shuffle(arr){
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  let mastered = new Set();
+  let queue = [];
+  let current = null;
+  let flipped = false;
+
+  function indexOfCard(c){ return ALL_CARDS.indexOf(c); }
+
+  function updateProgress(){
+    masteredCountEl.textContent = mastered.size;
+    const pct = ALL_CARDS.length ? Math.round((mastered.size / ALL_CARDS.length) * 100) : 0;
+    progressFill.style.width = pct + '%';
+    save({ mastered: Array.from(mastered).map(function(c){ return c.front + '||' + c.back; }) });
+  }
+
+  function showDone(){
+    stage.style.display = 'none';
+    donePanel.style.display = 'block';
+  }
+
+  function showStage(){
+    stage.style.display = '';
+    donePanel.style.display = 'none';
+  }
+
+  function renderCurrent(){
+    if(!current){
+      if(queue.length === 0){
+        showDone();
+        return;
+      }
+      current = queue.shift();
+    }
+    flipped = false;
+    cardEl.classList.remove('flipped');
+    topicTag.textContent = current.topic;
+    frontText.textContent = current.front;
+    backText.textContent = current.back;
+    stillBtn.disabled = false;
+    knowBtn.disabled = false;
+  }
+
+  function nextCard(){
+    current = null;
+    if(queue.length === 0){
+      showDone();
+      return;
+    }
+    showStage();
+    renderCurrent();
+  }
+
+  function buildQueue(preserveMastered){
+    queue = shuffle(ALL_CARDS.filter(function(c){ return !mastered.has(c); }));
+    current = null;
+    if(queue.length === 0){
+      showDone();
+    } else {
+      showStage();
+      renderCurrent();
+    }
+  }
+
+  cardEl.addEventListener('click', function(){
+    if(!current) return;
+    flipped = !flipped;
+    cardEl.classList.toggle('flipped', flipped);
+  });
+
+  stillBtn.addEventListener('click', function(){
+    if(!current) return;
+    queue.push(current);
+    current = null;
+    nextCard();
+  });
+
+  knowBtn.addEventListener('click', function(){
+    if(!current) return;
+    mastered.add(current);
+    updateProgress();
+    current = null;
+    nextCard();
+  });
+
+  shuffleBtn.addEventListener('click', function(){
+    shuffle(queue);
+    if(current){
+      queue.push(current);
+      current = null;
+      nextCard();
+    }
+  });
+
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Reset all flashcard progress on this device?')){
+      mastered = new Set();
+      save({ mastered: [] });
+      buildQueue();
+    }
+  });
+
+  againBtn.addEventListener('click', function(){
+    mastered = new Set();
+    updateProgress();
+    buildQueue();
+  });
+
+  // ---- init: restore mastered set from storage, matched by front+back text ----
+  (function init(){
+    const stored = load();
+    mastered = new Set();
+    if(stored.mastered && Array.isArray(stored.mastered)){
+      const byKey = {};
+      ALL_CARDS.forEach(function(c){ byKey[c.front + '||' + c.back] = c; });
+      stored.mastered.forEach(function(key){
+        if(byKey[key]) mastered.add(byKey[key]);
+      });
+    }
+    updateProgress();
+    buildQueue();
+  })();
+})();
+</script>
+</body>
+</html>
