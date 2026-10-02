@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring and Control — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+
+  .codewrap{ margin:16px 0; }
+  .code-label{ display:block; font-family:var(--mono); font-size:12px; color:var(--sage); margin-bottom:6px; }
+  pre.code{
+    margin:0; padding:14px 16px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-left:3px solid var(--signal); border-radius:var(--radius);
+    font-family:var(--mono); font-size:13px; line-height:1.6; overflow-x:auto; color:var(--paper);
+  }
+  pre.code .kw{ color:var(--gold); }
+  .example{ border:1px solid var(--trace); border-left:3px solid var(--gold); border-radius:var(--radius); background:var(--bg-raised); padding:2px 16px 10px; margin:16px 0; }
+  .example .ex-label{ font-family:var(--mono); font-size:12px; color:var(--gold); margin:12px 0 4px; display:block; }
+
+  .discussion{ border:1px solid var(--trace); border-left:3px solid var(--brick); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:20px 0; }
+  .discussion .d-label{ font-family:var(--mono); font-size:12px; color:var(--brick); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .discussion textarea{ margin-top:8px; }
+  .discussion .d-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+
+<nav class="theory-nav">
+  <a href="emerging-technologies-as-a-level-it.html">← <span class="full">Previous theory</span></a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · 13.2 Impact of New and Emerging Technologies</p>
+  <h1 class="title">Impact of New and Emerging Technologies</h1>
+  <p>New and emerging technologies affect individuals, organisations and the environment in ways that aren't always positive. This page looks at power consumption, e-waste, manufacturing and wireless energy, then works through six exam-style practice questions.</p>
+</header>
+
+<div class="wrap">
+
+<div class="panel active" id="panel-impact">
+  <p>New and emerging technologies are having important impacts on many aspects of our lives. Earlier pages looked at advances in medicine, healthcare and scientific research. Here we consider environmental issues, and how new technology can affect individuals and organisations in different ways.</p>
+  <p>For example, a new technology may make a process more efficient for an organisation. However, this may mean that fewer employees are needed to work on the process, so people lose their jobs. Blockchain and cryptocurrency mean that the banking system is under threat from people who choose to use cryptocurrency rather than normal banking systems.</p>
+
+  <h2 class="section-title">The environment</h2>
+  <p>Emerging technologies have many positive effects on our lives. But they can cause issues for the environment.</p>
+
+  <h3>Power consumption</h3>
+  <p>Technology uses power. This may be batteries, rechargeable batteries or electricity. The more technology we use, the more power we need. The demand for electricity may increase the amount of pollution we create, because we often use fossil fuels to generate electricity. However, more countries use wind, solar and hydroelectric power. Ensuring we use renewable energy sources will help limit the impact we have on climate change.</p>
+
+  <h3>E-waste and recycling</h3>
+  <p>Another challenge is that the metals used in batteries and electronics are often thrown away. Batteries cause pollution if they are not disposed of properly or recycled. Discarded digital devices such as desktop computers, mobile phones and games consoles contain rare metals and plastics. These can cause huge levels of pollution if sent to landfill.</p>
+  <p>Many of the metals in electronics are not yet recycled. Metals such as lead and lithium cause pollution. Governments around the world are trying to encourage the recycling of technology, to limit the issue created by this kind of disposal.</p>
+  <p>However, emerging technologies can also be used to help tackle climate change. AI can be used to monitor current trends and patterns and predict future ones. This could identify ways to make processes more efficient. AI can help reduce pollution by creating better transport links or reducing traffic jams. It can also be used by industries such as farming, so that they can create the best growing conditions for crops.</p>
+
+  <h3>Manufacturing processes</h3>
+  <p>Emerging technology can benefit the environment by making manufacturing processes more efficient. This can reduce the materials used and the energy wasted. However, the demand for emerging technology in manufacturing means that we need more rare materials and expensive components to create the technology used.</p>
+  <p>Emerging technology also helps reduce the size of new devices and components. For example, microprocessor chips can be much smaller and more powerful because of developments in transistor technology. This means that manufacturing machines need to be updated to help make the new devices or components, which can create a lot of waste when a manufacturer has to upgrade every machine in its factory.</p>
+  <p>New technology often helps make manufacturing more automated. This means that jobs people used to do may be replaced by machines. However, machines still need humans to clean, maintain and operate them, so workers may need to retrain.</p>
+
+  <h2 class="section-title">Energy from wireless signals</h2>
+  <p>Much modern technology uses wireless signals to communicate. Portable technology uses battery power as a source of electricity. These two things are linked.</p>
+  <p>Wireless signals have energy. New devices are being developed that can convert Wi-Fi signals into energy. This energy can be used to charge batteries and power small devices — imagine being able to sit near a Wi-Fi source and have your mobile phone recharge automatically.</p>
+  <p>Energy from wireless signals could also be used to power very small electrical devices directly, such as medical sensors — for example a sensor that detects blood sugar levels in a diabetic person. This means that sensors and small devices in your house could be powered by having Wi-Fi signal points nearby, letting the sensors run all day long without needing to be plugged in.</p>
+
+  <h3>Questions</h3>
+<div class="task" data-task="open" data-points="1">
+  <p class="task-label"><span>Question 10</span><span class="pts">1 point</span></p>
+  <h4>What threats to the environment are there from the development of emerging technology?</h4>
+  <div class="sub-q">
+    <label>a) List the threats to the environment that emerging technology creates.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Increased power consumption, often generated from fossil fuels; e-waste and pollution from batteries and electronics sent to landfill, including toxic metals such as lead and lithium; and the demand for rare materials and expensive components to manufacture new devices.</div>
+    <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="discussion"><span class="d-label">Discussion point</span><p>What do you think could be done to reduce the disposal of old technology into landfill?</p><textarea placeholder="Jot down your own thoughts here (not marked)…"></textarea><p class="d-note">This is for your own reflection — there's no single correct answer, and it isn't scored.</p></div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click whether each statement is about power consumption, e-waste, or manufacturing.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="pow"><span class="term">More technology in use increases demand for electricity, often from fossil fuels</span><span class="choices"><button data-choice="pow">Power consumption</button><button data-choice="waste">E-waste</button><button data-choice="man">Manufacturing</button></span></div>
+    <div class="classify-item" data-answer="waste"><span class="term">Discarded phones and consoles contain rare metals that pollute landfill if not recycled</span><span class="choices"><button data-choice="pow">Power consumption</button><button data-choice="waste">E-waste</button><button data-choice="man">Manufacturing</button></span></div>
+    <div class="classify-item" data-answer="man"><span class="term">Upgrading factory machines to build smaller, newer components creates waste</span><span class="choices"><button data-choice="pow">Power consumption</button><button data-choice="waste">E-waste</button><button data-choice="man">Manufacturing</button></span></div>
+    <div class="classify-item" data-answer="pow"><span class="term">Renewable sources such as wind and solar can reduce technology's impact on climate change</span><span class="choices"><button data-choice="pow">Power consumption</button><button data-choice="waste">E-waste</button><button data-choice="man">Manufacturing</button></span></div>
+    <div class="classify-item" data-answer="waste"><span class="term">Lead and lithium from old batteries are examples of pollutants</span><span class="choices"><button data-choice="pow">Power consumption</button><button data-choice="waste">E-waste</button><button data-choice="man">Manufacturing</button></span></div>
+    <div class="classify-item" data-answer="man"><span class="term">Automation can replace jobs people used to do, so workers may need to retrain</span><span class="choices"><button data-choice="pow">Power consumption</button><button data-choice="waste">E-waste</button><button data-choice="man">Manufacturing</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="2">
+  <p class="task-label"><span>Quick check</span><span class="pts">2 points</span></p>
+  <div class="mcq" data-answer="1"><p class="q">1. Which of these is a way AI can help tackle climate change?</p><div class="opts"><button class="opt" data-idx="0">By using more battery power</button><button class="opt" data-idx="1">By monitoring trends and predicting future patterns to make processes more efficient</button><button class="opt" data-idx="2">By creating more e-waste</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">2. What could let a sensor run all day without being plugged in?</p><div class="opts"><button class="opt" data-idx="0">A larger battery</button><button class="opt" data-idx="1">Power converted from nearby Wi-Fi signals</button><button class="opt" data-idx="2">A faster processor</button></div><p class="mcq-feedback"></p></div>
+</div>
+
+  <h2 class="section-title">Practice questions <span class="tag">p.360</span></h2>
+<div class="task" data-task="points" data-points="2">
+  <p class="task-label"><span>Question 1</span><span class="pts">2 points</span></p>
+  <h4>Identify one advantage and one disadvantage to the user of wearable technology such as a health tracker. (2 marks)</h4>
+  <div class="sub-q mp" data-max="2">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 2)</span>
+      <label class="mp-item"><input type="checkbox"><span>Advantage: it can monitor health data and alert a professional or family member in an emergency</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Advantage: it can help motivate the user by tracking steps, heart rate or activity</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Disadvantage: accuracy can be poor, because devices are designed for the 'average' person</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Disadvantage: constantly seeing statistics can make a user anxious or obsessed</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Disadvantage: data security and privacy could be a concern</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="3">
+  <p class="task-label"><span>Question 2</span><span class="pts">3 points</span></p>
+  <h4>Explain three ways that 3D printing can be used in medical circumstances. (3 marks)</h4>
+  <div class="sub-q mp" data-max="3">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 3)</span>
+      <label class="mp-item"><input type="checkbox"><span>Creating dental crowns, braces or other dentistry items shaped exactly to the patient</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Producing prosthetics (artificial limbs) custom-fitted to the patient</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Producing medical tools or equipment</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Bio-printing tissue and organs</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Producing replacement parts for medical equipment</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="3">
+  <p class="task-label"><span>Question 3</span><span class="pts">3 points</span></p>
+  <h4>Explain two advantages to a surgeon of using augmented reality technology when performing surgery. (3 marks)</h4>
+  <div class="sub-q mp" data-max="3">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 3)</span>
+      <label class="mp-item"><input type="checkbox"><span>Smart glasses can show patient records, scans or vital signs without the surgeon looking away from the patient</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This means the surgeon doesn't need to turn to a separate screen, saving time and keeping focus on the patient</span></label>
+      <label class="mp-item"><input type="checkbox"><span>AR can overlay guidance (e.g. where to cut) directly onto the patient during the procedure</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It can reduce the risk of errors by giving the surgeon information exactly when and where they need it</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Question 4</span><span class="pts">4 points</span></p>
+  <h4>Explain two disadvantages that emerging technologies have on the environment. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>They increase power consumption, and electricity is often generated using fossil fuels, which increases pollution</span></label>
+      <label class="mp-item"><input type="checkbox"><span>E-waste: old devices contain metals such as lead and lithium, which pollute if not recycled and sent to landfill instead</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Manufacturing new, smaller components needs more rare and expensive materials</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Upgrading factory machines to make new devices can create a lot of waste</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Mining rare materials for new devices can itself damage the environment</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="8">
+  <p class="task-label"><span>Question 5</span><span class="pts">8 points</span></p>
+  <h4>Discuss the impact on employees of the use of AI in manufacturing. (8 marks)</h4>
+  <div class="sub-q mp" data-max="8">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 8)</span>
+      <label class="mp-item"><input type="checkbox"><span>AI can automate repetitive or dangerous tasks, protecting employees from unsafe work</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This can lead to job losses, as fewer employees are needed to do the work AI now performs</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Remaining employees may need to retrain to clean, maintain and operate the new AI-driven machines</span></label>
+      <label class="mp-item"><input type="checkbox"><span>AI can work 24/7 without rest, which may pressure human employees to work longer or different shifts</span></label>
+      <label class="mp-item"><input type="checkbox"><span>AI is more precise and consistent than humans, which may make employees feel replaceable or undervalued</span></label>
+      <label class="mp-item"><input type="checkbox"><span>New roles can be created, such as technicians or AI supervisors, though usually fewer than the jobs lost</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Employees may benefit from safer, less physically demanding working conditions</span></label>
+      <label class="mp-item"><input type="checkbox"><span>There may be ethical or morale concerns among staff about working alongside, or being replaced by, AI</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Employees with skills to manage or program AI may see better pay or job security</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 8 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Question 6</span><span class="pts">6 points</span></p>
+  <h4>Evaluate the potential impact on an organisation of using holographic data storage to archive data. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>Holographic storage can hold a huge amount of data in a very small physical space, e.g. around 1 terabyte on a crystal the size of a grain of sugar</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This could save an organisation significant space compared with traditional storage</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The technology is still very new and expensive to set up</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Current holographic storage is limited to around 300 gigabytes of usable data, which may not yet meet the organisation's needs</span></label>
+      <label class="mp-item"><input type="checkbox"><span>If it is reliable, it could let the organisation archive far more data without expanding its physical storage</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The organisation would need staff with the skills to install, use and maintain the new technology</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Overall, the impact depends on whether the benefits of the extra capacity outweigh the high current cost and the newness of the technology</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · Impact of New and Emerging Technologies — built for revision, points are just for you.
+</footer>
+
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
