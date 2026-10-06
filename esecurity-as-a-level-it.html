@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eSecurity — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  /* ---- box types: key word / practical activity / reflection / research task ---- */
+  .keyword{ border:1px solid var(--trace); border-left:3px solid var(--gold); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 14px; margin:18px 0; }
+  .keyword .kw-label{ font-family:var(--mono); font-size:12px; color:var(--gold); margin:14px 0 8px; display:block; letter-spacing:.02em; }
+  .keyword dl{ margin:0; }
+  .keyword dt{ font-family:var(--mono); font-size:14.5px; color:var(--paper); font-weight:500; margin-top:8px; }
+  .keyword dt:first-child{ margin-top:0; }
+  .keyword dd{ margin:2px 0 0; color:var(--paper-dim); font-size:15px; }
+
+  .activity{ border:1px solid var(--trace); border-left:3px solid var(--signal); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .activity .a-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .activity p:first-of-type{ margin-top:0; }
+
+  .discussion{ border:1px solid var(--trace); border-left:3px solid var(--brick); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .discussion .d-label{ font-family:var(--mono); font-size:12px; color:var(--brick); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .discussion p:first-of-type{ margin-top:0; }
+  .discussion textarea{ margin-top:8px; }
+  .discussion .d-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .research{ border:1px solid var(--trace); border-left:3px solid var(--sage); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .research .r-label{ font-family:var(--mono); font-size:12px; color:var(--sage); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .research p:first-of-type{ margin-top:0; }
+  .research textarea{ margin-top:8px; }
+  .research .r-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+
+<nav class="theory-nav">
+  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Chapter 5 eSecurity</p>
+  <h1 class="title">eSecurity</h1>
+  <p>Your personal data is valuable, and attackers have many ways to try to get hold of it. This chapter covers how personal data is targeted through phishing, smishing, vishing and pharming, and the malware — from viruses to ransomware — used to attack computer systems.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="data">5.1 Personal data</button>
+  <button class="tab-btn" data-panel="malware">5.2 Malware</button>
+</nav>
+
+<div class="wrap">
+
+<div class="panel active" id="panel-data">
+  <h2 class="section-title">Personal data <span class="tag">5.1</span></h2>
+<div class="discussion"><span class="d-label">Before you start</span><ul style="margin:0 0 0 18px;"><li>Do you know that personal data includes data such as your name, your address, your telephone number and your email address?</li><li>Do you have a basic understanding of what a cyber attack is, and what cyber security means?</li></ul></div>
+
+  <h3>Introduction</h3>
+  <p>The world of IT can be fun and exciting, but it also comes with dangers, so it's important to be aware of them and know how to protect yourself.</p>
+  <p>There are people online with malicious intentions, and the more aware you are of what they could do, the better protected you can be. Building this awareness, and spending time keeping it up to date, helps make sure that your time online — and further afield, with technology generally — doesn't put you, your data or your identity at risk.</p>
+  <p>Sadly, many people relax their safety measures online because they feel comfortable at home and assume nothing bad will happen. This makes genuine, if boring, safety advice easy to ignore, even though it still matters.</p>
+
+  <h3>Personal data</h3>
+  <p><strong>Personal data</strong> is any data that relates to you and your identity. This includes data such as:</p>
+<div class="block">
+  <ul>
+    <li>Name</li>
+    <li>Address</li>
+    <li>Telephone number</li>
+    <li>Email address</li>
+    <li>Bank details</li>
+    <li>Medical records</li>
+    <li>Salary</li>
+    <li>Political opinions</li>
+  </ul>
+</div>
+
+  <p>You should be very careful about revealing any of your personal data. Revealing it to another person — especially online — exposes you to risks such as identity theft, fraud, bullying and blackmail. These problems can arise simply because revealing more about your thoughts and feelings to people lets them use that against you later. It's a sinister way to think about it, but the moment you reveal any personal data to someone, you are giving them the potential to use it against you or your identity. That doesn't mean you should never talk about yourself — just that, especially with people you don't know online, it pays to recognise a danger and know how to keep your identity secure.</p>
+  <p>Just as you've probably been taught to lock doors, not talk to strangers, and avoid unsafe areas in daily life, the same caution is worth applying online.</p>
+
+  <p>Some guidelines that can help you keep your personal data confidential:</p>
+<div class="block">
+  <ul>
+    <li>Use strong passwords on any account that holds personal data. A strong password includes a random mix of characters, numbers and symbols, and isn't an easily recognisable word.</li>
+    <li><strong>Encrypt</strong> (scramble) any data you store on your computer, so it can't be read without a decryption key.</li>
+    <li>Have a <strong>firewall</strong> active, to scan incoming and outgoing traffic from your computer system.</li>
+    <li>Regularly scan your computer with up-to-date <strong>anti-virus</strong> software, used to identify and remove viruses.</li>
+    <li>Make use of <strong>biometric</strong> devices (which measure a person's biological data, such as a thumbprint) built into technology.</li>
+    <li>Only visit and give data to websites that are a trusted source.</li>
+  </ul>
+</div>
+<div class="keyword"><span class="kw-label">Key words</span><dl>
+  <dt>firewall</dt>
+  <dd>A security measure that can be implemented to monitor traffic into and out of a computer, and prevent external users from gaining unauthorised access to a computer system.</dd>
+  <dt>anti-virus</dt>
+  <dd>Software used to identify a virus on a computer and remove it.</dd>
+  <dt>biometric</dt>
+  <dd>A unique physical characteristic of a person that a computer can use for identification purposes.</dd>
+</dl></div>
+<div class="block">
+  <ul>
+    <li>Don't open email attachments from a sender you don't recognise.</li>
+    <li>Check the URL attached to any link that requests your data, to see if it is genuine.</li>
+    <li>Be cautious about any pictures or opinions you post or send to people.</li>
+    <li>Remove location data (geotags) automatically attached to photos and videos before you post them.</li>
+    <li>Don't become 'friends' on social networking sites with people you don't actually know.</li>
+    <li>Set every available privacy control on social media accounts to the most secure setting.</li>
+    <li>Report and block any suspicious users.</li>
+    <li>Use a nickname or pseudonym when using the internet for entertainment, for example playing games.</li>
+    <li>Where possible, use a <strong>virtual private network (VPN)</strong> — an encrypted connection that can be used to send data more securely across a network.</li>
+  </ul>
+</div>
+<div class="keyword"><span class="kw-label">Key words</span><dl>
+  <dt>geotag</dt>
+  <dd>An electronic tag that assigns a geographical location.</dd>
+  <dt>virtual private network</dt>
+  <dd>An encrypted connection that can be used to send data more securely across a network.</dd>
+</dl></div>
+  <h3>How is personal data collected?</h3>
+  <p>There are several ways an unauthorised person can try to collect your data. These include:</p>
+<div class="block">
+  <ul>
+    <li>Phishing</li>
+    <li>Smishing</li>
+    <li>Vishing</li>
+    <li>Pharming</li>
+  </ul>
+</div>
+
+  <h3>Phishing</h3>
+  <p><strong>Phishing</strong> is when a person sends an email that looks legitimate to a user. The email contains a link to a website that also looks legitimate. The user is encouraged to click the link and input personal data into a form on the website — or the email itself could simply ask the user to reply with their personal data. The user is tricked into giving away personal data to a source they believe is legitimate, when both the email and the linked website actually come from a fake, unauthorised source.</p>
+  <p>The personal data collected this way can then be used by the unauthorised person to commit fraud, or to steal the person's identity. Phishing emails often try to pressure the user, for example by threatening that they must click the link and fix an issue, or something further will go wrong. The aim of a phishing attack is to steal the user's personal data.</p>
+
+  <h3>A real-life example of phishing</h3>
+  <p>PayPal has been the target of phishing emails on several occasions. Users receive an email that looks as though it came from PayPal, using PayPal's own branding. The email typically warns of unusual account activity, or asks the user to verify their account, and asks them to click a link to log in. Because the user is already on the lookout for a real PayPal email, they can easily be caught out and hand over their login details on the fake page.</p>
+  <p>Legitimate companies are protective of their professional reputation, and carefully check all communications for correct spelling and grammar. A link in a genuine email will normally contain the company's actual domain name, which you can check by hovering over the link (or by right-clicking and inspecting it) without clicking it. If the address the link actually points to doesn't contain the correct domain name — for example, if the sender is <code>user@paypal.co</code> rather than <code>user@paypal.com</code> — this is a sign the email isn't from a legitimate source.</p>
+
+  <h3>How to recognise phishing</h3>
+  <p>There are several guidelines to be aware of, to avoid being caught out by phishing:</p>
+<div class="block">
+  <ul>
+    <li>Don't open an email that isn't from a sender or trusted source you recognise.</li>
+    <li>A legitimate company will never ask you for your personal data using email. Be immediately suspicious of any email that requests your personal data.</li>
+    <li>A legitimate company will normally address you by your name. Be suspicious of any email that addresses you as 'Dear Member' or 'Dear Customer'.</li>
+    <li>Be suspicious of any email with poor grammar or spelling mistakes — legitimate companies check this carefully.</li>
+    <li>A link in a genuine email from a legitimate company will normally contain the company's domain name. Hover over, or right-click and inspect, a link before clicking it to check its actual address.</li>
+  </ul>
+</div>
+<div class="research"><span class="r-label">Question 1</span><p>Investigate the use of a VPN. Find out what security benefits it may have.</p><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+
+  <h3>Smishing</h3>
+  <p><strong>Smishing</strong> (or SMS phishing) is a variant of phishing that uses text messages to lure the user into providing their personal data. The user is sent a text message that either contains a link to a website — in the same way as phishing — or asks them to call a telephone number to resolve an urgent issue.</p>
+  <p>The same advice for avoiding phishing applies to smishing. The user should question any links sent from an unknown or suspicious number at any time. If a user believes a message may be legitimate, it's best to type the company's domain name into their browser directly, rather than follow the link in the message. Users should also block any numbers they believe are suspicious, to prevent further risk of smishing from that number.</p>
+
+  <h3>Vishing</h3>
+  <p><strong>Vishing</strong> (or voice phishing) has the same aim as phishing: to obtain a user's personal details. The user receives a telephone call, which could be from an automated system or from a real person.</p>
+  <p>An automated voice could tell the user that an issue has occurred, such as suspicious activity on their bank account, and ask them to call another number, or simply to press a digit to be connected to another automated system that asks them to provide their bank account details to resolve the issue. Once obtained, these details can be used to commit a crime against the user.</p>
+  <p>The automated system could be replaced by a real person, who tries to convince the user that there has been an issue with their account, and that they need to provide log-in details or a PIN so it can be resolved. The precaution for vishing is the same as for a suspicious call of any kind: no company will ever call and ask you to provide account details or a PIN over the phone, and if in doubt, hang up and call the company back on a number you already know or can verify independently.</p>
+
+  <h3>Pharming</h3>
+  <p><strong>Pharming</strong> is when an unauthorised user installs malicious code on a person's hard drive or server. The malicious code is designed to redirect a user to a fake website when they type the address of a legitimate one. The fake website is designed to look just like the legitimate one, so the user doesn't realise they have been redirected, and enters their personal data into the fake site believing it to be the real one. The unauthorised person will now have the user's personal data.</p>
+  <p>A common technique used in pharming is <strong>DNS cache poisoning</strong>. This exploits vulnerabilities in the domain name server (DNS) system, and diverts internet traffic that was meant for a legitimate server to a fake one instead. The unauthorised user needs to find a way to install the malicious code on the computer — often hidden in an email attachment or link, so that it downloads when the user opens the attachment or clicks the link. The aim of a pharming attack, like phishing, is to steal the user's personal data.</p>
+
+  <h3>A real-life example of pharming</h3>
+  <p>In 2007, a number of well-known companies — including PayPal, eBay, Barclays Bank and American Express — were targeted in a pharming attack. Over a three-day period, hackers managed to infect some users' PCs with a pharming code, redirecting them to fake, localised versions of each company's website when they tried to visit the genuine sites, to try to steal their personal data.</p>
+  <p>The original infected email was set up to look like a shocking news story, to encourage users to click a link to find out more — downloading the malicious code onto their computer in the process. It was a fairly sophisticated attack, needing legitimate-looking fake websites set up for a large number of companies, and it isn't known exactly how much the hackers were able to obtain as a result.</p>
+
+  <h3>How to prevent pharming</h3>
+  <p>All of the guidelines for avoiding phishing and smishing are also relevant for pharming. There are also some further precautions that can help guard against pharming attacks specifically:</p>
+<div class="block">
+  <ul>
+    <li>Have a firewall installed and operational. A firewall monitors the traffic coming into and out of your computer, checks it against set criteria, and will flag and stop any traffic that doesn't meet that criteria — such as suspicious traffic from malicious code trying to enter your system.</li>
+    <li>Have an anti-virus program installed, designed to detect malicious code. You need to scan your computer regularly to check for any malicious code; it's advisable to set up an automatic scan on a daily basis, and to leave it switched on whenever your computer is on.</li>
+    <li>Be aware when using public Wi-Fi connections. A hacker could directly access your computer and install malicious code if you are connected to a public Wi-Fi network. It's advisable to use a VPN on public Wi-Fi — it shields your internet activity and personal data from a hacker, making it more difficult for them to gain access to your computer.</li>
+  </ul>
+</div>
+
+  <p>Smishing can also be used as a form of pharming: the user is sent a link that, when clicked, downloads malware onto their mobile device. It's advisable to have security software installed on mobile devices, too, and to scan them regularly to detect any issues.</p>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which type of attack each scenario describes.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="vish"><span class="term">A caller asks the user to press a digit to be connected to an automated system requesting account details</span><span class="choices"><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button><button data-choice="pharm">Pharming</button></span></div>
+    <div class="classify-item" data-answer="phish"><span class="term">An email claiming to be from a bank asks the user to click a link and log in to verify their account</span><span class="choices"><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button><button data-choice="pharm">Pharming</button></span></div>
+    <div class="classify-item" data-answer="vish"><span class="term">A phone caller claims to be from the user's bank and asks for their PIN to resolve an issue</span><span class="choices"><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button><button data-choice="pharm">Pharming</button></span></div>
+    <div class="classify-item" data-answer="pharm"><span class="term">Malicious code on the user's computer redirects them to a fake copy of their bank's website, even though they typed the real address</span><span class="choices"><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button><button data-choice="pharm">Pharming</button></span></div>
+      <div class="classify-item" data-answer="smish"><span class="term">A text message asks the user to call an urgent number about a delivery problem</span><span class="choices"><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button><button data-choice="pharm">Pharming</button></span></div>
+    <div class="classify-item" data-answer="pharm"><span class="term">DNS cache poisoning diverts a user's traffic to a fake website designed to look identical to a legitimate one</span><span class="choices"><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button><button data-choice="pharm">Pharming</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Match each guideline to the attack type it's most specifically useful against.</h4>
+  <div class="sub-q">
+    <label>a) A firewall helps protect against which attack, by stopping malicious code entering a system?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Pharming</div>
+    <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Hovering over a link to check its domain name before clicking helps spot which attack?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Phishing (and smishing, if the message contains a link)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Typing a company's domain name into the browser directly, instead of following a link in a text, helps avoid which attack?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Smishing</div>
+    <div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Hanging up and calling a company back on a number you already know helps avoid which attack?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Vishing</div>
+    <div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Describe how a pharming attack works, and explain one way a user can reduce the risk of becoming a victim of pharming. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Malicious code is installed on the user's hard drive or server (or DNS cache poisoning diverts traffic)</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This redirects the user to a fake website when they type the address of a legitimate one</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The fake website is made to look identical to the real one</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The user enters personal data believing it to be the genuine site</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A firewall can detect and block suspicious traffic, such as the malicious code trying to enter the system</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Keeping anti-virus software installed and regularly updated/scanning can detect and remove the malicious code</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Using a VPN protects data when using public Wi-Fi, making it harder for an attacker to install malicious code</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="2"><p class="q">1. What is the main aim of a phishing, smishing, vishing or pharming attack?</p><div class="opts"><button class="opt" data-idx="0">To speed up the user's internet connection</button><button class="opt" data-idx="1">To damage the user's computer hardware</button><button class="opt" data-idx="2">To steal the user's personal data</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. Which technique exploits vulnerabilities in the domain name server system to redirect users to a fake site?</p><div class="opts"><button class="opt" data-idx="0">DNS cache poisoning</button><button class="opt" data-idx="1">Biometric authentication</button><button class="opt" data-idx="2">Encryption</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Why should you hover over or inspect a link before clicking it in an email?</p><div class="opts"><button class="opt" data-idx="0">To check whether it leads to the company's real domain name</button><button class="opt" data-idx="1">To make the email load faster</button><button class="opt" data-idx="2">To automatically block the sender</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-malware">
+  <h2 class="section-title">Malware <span class="tag">5.2</span></h2>
+  <p><strong>Malware</strong> (malicious software) refers to any software designed to disrupt or damage a computer system, or sometimes a user.</p>
+<div class="keyword"><span class="kw-label">Key word</span><dl>
+  <dt>malware</dt>
+  <dd>Software that is malicious.</dd>
+</dl></div>
+
+  <p>There are various types of malware. These include:</p>
+<div class="block">
+  <ul>
+    <li>virus</li>
+    <li>trojan</li>
+    <li>worm</li>
+    <li>spyware</li>
+    <li>adware</li>
+    <li>rootkit</li>
+    <li>malicious bots</li>
+    <li>ransomware</li>
+  </ul>
+</div>
+
+  <p>The consequences for an individual or a business depend on the type of malware. Some malware may just cause a minor irritation, such as slowing a computer down, but it could be much more serious, leading to identity theft, corruption of data, or blackmail (either to do with personally collected data, or to restore blocked access).</p>
+
+  <h3>Virus</h3>
+  <p>A <strong>virus</strong> is the most commonly known type of malware. It is the only type of malware that infects new files on a computer system: it attaches itself to a clean file, replicates, then lays dormant until the computer causes the code to be executed. If an infected file has already been replicated, it may begin to perform actions immediately, or lay dormant until the computer causes the code to be executed. Once part of the network, a virus can be especially dangerous if it infects files on a server that are accessed by many different computers.</p>
+  <p>There are several signs that your computer may have been infected with a virus. These include:</p>
+<div class="block">
+  <ul>
+    <li>Slower system performance</li>
+    <li>Files multiplying or duplicating on their own</li>
+    <li>Files being deleted without your knowledge</li>
+  </ul>
+</div>
+
+  <p>The aim of a virus is to corrupt and disrupt data in a computer system. It is mainly a method of sabotage.</p>
+
+  <h3>Minimising the risk of a virus</h3>
+  <p>If a virus manages to infect a computer, it can be very difficult to eradicate. A robust anti-virus solution is needed to minimise the risk of a virus. You should install an anti-virus program and regularly scan your computer. It is best to set up a daily automatic scan at a time when you know your computer is likely to be switched on.</p>
+  <p>Anti-virus software scans a computer system and finds any files it thinks contain a virus. It will quarantine these files and alert the user of their presence. The user can then select to delete these files. It is also possible to remove this stage and set the software to automatically delete all quarantined files.</p>
+  <p>One weakness of anti-virus software is that it is dependent on the database it holds. If a perpetrator manages to hack a system with a virus that isn't in the database, it won't be recognised and removed, which could leave it to do a great deal of damage. For this reason, it is also important to update your anti-virus software to make sure it includes the latest known viruses.</p>
+  <p>Some anti-virus software can be set for real-time checking. This means that all programs that are requested for download are immediately checked for viruses. If the anti-virus detects the presence of a virus, it will alert the user and tell them not to download the file as it contains a virus.</p>
+  <p>You should also be very careful when sharing any resources using portable storage devices such as USB memory sticks. You should immediately scan any USB memory stick that is inserted into your computer, even if it is your own storage device. It is very common for viruses to spread through the use of portable storage devices.</p>
+
+  <h3>Trojan</h3>
+  <p>A <strong>trojan</strong> is a type of malware that disguises itself as legitimate software, or is included within legitimate software that has been tampered with. The term "trojan" comes from Greek mythology: the Greeks gave a wooden horse as a peace offering to the people of the city of Troy. The horse actually contained several soldiers, who climbed out at night and opened the city gates to the rest of the army, who were then able to conquer the city.</p>
+  <p>A malware trojan works in a similar way. It looks harmless, but hides a malicious program. When the trojan file is opened, it will normally release another type of malware, such as a virus. A trojan needs the user to run the program for it to release other malicious software, so it will usually encourage the user to run the program, for example by telling the user that another program needs to be updated, and to click a program to update it. This then runs the trojan, and allows it to release further damage.</p>
+
+  <h3>Minimising the risk of a trojan</h3>
+  <p>It is difficult to minimise the risk of trojans, because they mask themselves as legitimate software. They also require the user to run them, so rely on the error of a user operating, rather than a flaw in the software or a firewall. It is more likely that a user would make an error and be tricked into running the software than that a weakness in a firewall or anti-virus would let the malware go undetected.</p>
+  <p>The main way to minimise the risk of a trojan is to only open files and click to run software that is from a trusted source, for example trusted companies and trusted websites. If you are in any doubt about the program, do not run it.</p>
+<div class="research"><span class="r-label">Question 2</span><p>Find out what is meant by a backdoor trojan.</p><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+
+  <h3>Worm</h3>
+  <p>A <strong>worm</strong> is a type of malware that acts in a similar way to a virus, but with a fundamental difference. A worm is a program that replicates itself, like a virus, but unlike a virus it does not need to attach itself to another program or file to cause damage. Worms exploit security holes and issues in a computer. These normally exist in the operating system.</p>
+  <p>A worm replicates itself and aims to fill up all of the free space on a computer to slow it down and bring it to a halt. Therefore, the first signs for a user that their computer has been infected with a worm is that it starts to run slowly and the space on their hard drive begins to rapidly decrease.</p>
+  <p>A worm also tries to spread to different computers on a network. For this reason, worms are often used to infect a large number of computers on a network. If a worm is able to spread throughout a network, it can clog up bandwidth and slow the whole network down.</p>
+  <p>Worms are normally downloaded and spread through email attachments, peer-to-peer file-sharing networks, or using a link to a website or resource. Once downloaded, they do not need any other human interaction to replicate themselves.</p>
+  <p>A well-known example of a computer worm is Stuxnet. Stuxnet was a computer worm that was used as a cyber weapon in 2010. It was discovered by two security researchers who recognised that the worm was far more complex than any they had seen at the time. The worm was being used to attack a power plant, and security experts believed the aim was to sabotage nuclear weapon production.</p>
+
+  <h3>Minimising the risk of a worm</h3>
+  <p>Worms often aim to exploit software vulnerabilities in a computer. These will normally be located in the operating system or applications. Therefore, you should regularly check for and install updates for your operating system and applications. If this process can be set to occur automatically, this removes the need to remember to do it.</p>
+  <p>The same guidelines about minimising phishing should also be followed, as this can help reduce the risk of downloading a worm attached to an email attachment or a link.</p>
+  <p>Anti-virus software can normally check for worms too. Therefore, regularly scanning your computer with anti-virus software can help identify a worm that has infected your computer.</p>
+  <p>Worms can be spread through network connections. Therefore, disconnecting your computer from a network, when the network resources are not required, can keep it safe during this time.</p>
+<div class="research"><span class="r-label">Question 3</span><p>Find out about another well-known example of a computer worm called Conficker.</p><ul><li>What issues did Conficker cause?</li><li>Who did Conficker affect?</li><li>How was Conficker dealt with?</li></ul><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+
+  <h3>Spyware</h3>
+  <p><strong>Spyware</strong> is a general term used to describe malware that is designed to gather information about your interactions with your computer. As the name suggests, the aim of spyware is to spy on the user.</p>
+  <p>A common example of spyware is a <strong>key logger</strong>. A key logger is installed on a user's computer, normally without their consent. The key logger will then record any key presses carried out by the user. All of this data is sent to a third party, normally the person who created the spyware, to be analysed. The data is analysed, normally by another computer, to establish any patterns in the data. The patterns are then analysed to see if any of them look as though they could be personal or sensitive data, for example a password.</p>
+  <p>Spyware can perform actions beyond just key logging. A user can sometimes unknowingly allow a commercial company to use spyware for several purposes, including:</p>
+<div class="block">
+  <ul>
+    <li>Targeted marketing from tracking browsing habits</li>
+    <li>Sending unwanted and often irritating pop-up adverts</li>
+    <li>Installing add-ons and redirecting to advertising websites</li>
+  </ul>
+</div>
+
+  <p>You can often unknowingly download spyware while using the internet. It can be embedded into enticing opportunities, such as a pop-up advert offering a prize or a free product. It can also be embedded into the download of a video, music or application file, those that are free of cost. Sometimes this may involve consenting to the download of the spyware, and can go unread and unnoticed if this consent is buried in the small print.</p>
+  <p>Cookies are a type of spyware that you may consent to, used to track your internet surfing habits. Even with cookies, you should always check what you are allowing the company to do with your data shared with third parties.</p>
+
+  <h3>Minimising the risk of spyware</h3>
+  <p>Spyware is always roaming around the internet, so it is important to understand how you can minimise the risk of allowing it to be used to monitor your actions.</p>
+  <p>As always, be very careful about what you download, especially when downloading software that is free of cost, and downloading from video, music and file-sharing sites. Make sure that this is only done from trustworthy and reputable sources.</p>
+  <p>Do not click on any links or offers in pop-up adverts, no matter how enticing they may seem. If there is no obvious way to close a pop-up window, you can press ALT and F4, and this will close your internet session.</p>
+  <p>Always read the small print when consenting to any user agreement. Commercial companies can sometimes list adware in their product by claiming that it will generate revenue for them, keeping the cost of the product lower.</p>
+<div class="keyword"><span class="kw-label">Key word</span><dl>
+  <dt>anti-malware</dt>
+  <dd>Software that is used to identify malware on a computer and remove it.</dd>
+</dl></div>
+
+  <p><strong>Anti-malware</strong> software can be used to scan your computer to see if any key-logging software is present. This type of software will normally remove any key logger it finds. If it does find a key logger, it is advisable to change all your passwords immediately, in case any of your passwords have been gathered and analysed, before the issue occurs in the future.</p>
+<div class="research"><span class="r-label">Question 4</span><p>Find out how the General Data Protection Regulation (GDPR) in the European Union (EU) has affected the use of spyware.</p><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+<div class="research"><span class="r-label">Question 5</span><p>Find out about mobile spyware.</p><ul><li>How are mobile phones infected?</li><li>How is spyware used in mobile devices?</li></ul><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+
+  <h3>Adware</h3>
+  <p><strong>Adware</strong> is a type of software designed to display targeted advertising on your computer. It does this by collecting data about your internet browsing habits. Adware can be legitimate, or it can be illegitimate.</p>
+  <p>Legitimate program developers will justify the inclusion of adware in their product by claiming that it will generate revenue for them, keeping the cost of the product lower. Adware can be bundled with legitimate software downloads. This means you may end up downloading adware onto your computer without actually asking for it, and this can happen when you are given the chance to customise what is downloaded. For example, there may be a hidden addition to the download of a task or search bar added into your current internet browser. You can customise the download and uncheck the box so that you do not get the adware, but if you do not know to do this you may download it unknowingly.</p>
+  <p>Once downloaded, adware can prove difficult to delete, as they do not normally have an uninstall feature. It may not act maliciously, but it will often serve as a method of advertising for the company, or try to get you to use their search function.</p>
+  <p>Adware as malware will present adverts when a user is browsing the web, that are often shown constantly. They are normally in the form of pop-ups or windows that cannot be closed. They can often be very irritating.</p>
+
+  <h3>Minimising the risk of adware</h3>
+  <p>You may be happy to allow some adware to track your browsing habits online. This will allow you to see adverts for products that you might be interested in. You may not be happy to allow adware to make your browsing experience become constantly interrupted by having too many adverts popping up on a constant basis. Therefore, you may want to be careful about what adware you allow to be installed on your computer.</p>
+  <p>The most proactive measure you can take with adware is to make sure that you check exactly what is downloaded onto your computer. Look at the list of component parts that will be downloaded, and make sure that any that look like they could be adware (for example, a search bar or task bar addition to your browser) are not ticked. If they are present, untick them immediately before allowing the download to go ahead.</p>
+  <p>Once downloaded, unwanted adware can be very difficult to remove. It may take several scans with anti-malware software to detect and remove the adware.</p>
+
+  <h3>Rootkit</h3>
+  <p>A <strong>rootkit</strong> is a computer program that enables a person to gain administrator access to a victim's computer. They are designed to stay hidden on a user's computer, and allow the computer to be controlled from a remote location. A rootkit allows the unauthorised user to carry out several illegal tasks with the computer, use the computer as part of a larger cyber attack, or to steal personal data and information.</p>
+  <p>Rootkits can get installed because a victim's password is cracked, or a vulnerability in the security of a computer system is exploited. The person installing it can then use the access to stop the computer recognising that the rootkit is there, so the victim will not know that someone else has complete access to their system. The rootkit will normally be buried deep within the operating system, so that it can try to avoid any detection by anti-malware software. Other malware can be incorporated into a rootkit, which can then be concealed on the computer to cause harm.</p>
+  <p>One very sneaky way that an unauthorised person can use to install a rootkit on a computer is by leaving USB memory sticks, infected with a rootkit, in places they believe will be found. They are relying on the curiosity of another user to insert the USB memory stick that they have found into their computer, and therefore download the rootkit.</p>
+  <p>An early rootkit example is NTRootkit. This appeared in 1999, and was designed to infiltrate Windows operating systems. A rootkit designed to do the same with Mac operating systems didn't appear until 10 years later.</p>
+
+  <h3>Minimising the risk of a rootkit</h3>
+  <p>Rootkits are often installed through your computer password being cracked, or through another method such as being embedded in a software download or installed on a USB memory stick.</p>
+  <p>It is advisable to have a strong password set for your computer, to minimise the risk of it being cracked. A strong password should contain a random mixture of characters, numbers and symbols. It should not contain any data that could be connected to you or your likes and dislikes. It is also advisable to change your password on a regular basis, in case it has been discovered.</p>
+  <p>Previous advice should also be followed about making sure that software is only downloaded from trusted and reputable sources. You should also, under no circumstances, insert a USB memory stick that you find into your computer. It may be tempting to see what it contains, but the risks that could be attached to inserting it into your computer are not worth the temptation.</p>
+  <p>Removing a rootkit from a computer once it has been installed can be extremely difficult. It is software that is designed to be hidden and heavily relies on this feature. A rootkit may be detected by anti-malware, but this is highly unlikely. Often, one of the only ways to rid a computer of a rootkit is to completely reinstall the operating system.</p>
+<div class="research"><span class="r-label">Question 6</span><p>Rootkits can also be used in a positive way. Find out how rootkits are used in connection with Digital Rights Management (DRM).</p><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+
+  <h3>Malicious bots</h3>
+  <p>A bot, short for robot, is an application used to carry out simple, repetitive tasks that are automated. These are normally tasks that would be mundane and time-consuming for a human to find and do. A bot could be used for very productive reasons, such as indexing a search engine, but they can also be used as a type of malware.</p>
+  <p>Malicious bots are used by cybercriminals in a variety of ways:</p>
+<div class="block">
+  <ul>
+    <li><strong>SPAM bots</strong> are used to bombard people's email inboxes with SPAM emails.</li>
+    <li><strong>Zombie bots</strong> are used to create a bot network. The bot will lay dormant on a computer until an attack is launched. The computer will then be connected with lots of other computers that have been compromised to launch a large-scale attack on an organisation. Computers connected this way can be known as a <strong>botnet</strong>.</li>
+    <li><strong>Chatter bots</strong> will pretend to be humans or sites, such as social networking and dating sites. They will try to emulate human interaction, with the goal of obtaining personal data.</li>
+    <li><strong>File-sharing bots</strong> will provide a search result for a user's search request, and offer a link for file download.</li>
+  </ul>
+</div>
+
+  <p>Bots often have worm-like capabilities, because they can replicate and spread themselves.</p>
+
+  <h3>Minimising the risk of bots</h3>
+  <p>As bots can often be embedded into links or software downloads, and are often spread in the same way that phishing is carried out, the same measures that can be applied to minimise phishing can also help minimise the risk from bots. The best advice is to think carefully about who you are talking to and whether they link you will click on any links without first checking who sent them and that the link will take you to a trusted resource.</p>
+  <p>As bots can often be used in a chat situation, you should never give out any personal data when chatting online. Even if you feel this is in a private environment, one with another person, you should still never provide any personal data. If you are chatting to friends, you should agree to never request any personal data from each other online. If you are chatting to what you believe is a friend, if you feel they ask you an odd question, or for personal data, then contact them by another means, such as calling them, and double check that you are speaking to your friend.</p>
+  <p>If you suspect that you have downloaded a bot, anti-malware software can be used to detect and remove it.</p>
+  <p>A firewall can also be used to detect the activity of a bot, as it may recognise suspicious traffic created by the bot. However, if a bot is sophisticated and can disguise its communications as legitimate traffic, it will go unnoticed by a firewall.</p>
+
+  <h3>Ransomware</h3>
+  <p><strong>Ransomware</strong> is a type of malware that restricts a user's access to their computer system and files. The ransomware will normally demand that the user pays a ransom in order to regain access to their computer system. Some ransomware programs will completely lock a user's system, and some will encrypt all of the files on their system in a way that renders them useless. Ransomware will normally try to enter a system in a similar way to a trojan. If the user doesn't pay the ransom in a set amount of time, they risk losing their data forever.</p>
+  <p>A well-known example of ransomware is WannaCry, a 2017 attack that spread rapidly across the world. The unauthorised user demanded that an infected user pay a $300 ransom. If the user did not pay within three days, the amount was doubled. If payment was not made within a week, the unauthorised user threatened to delete the infected user's files forever.</p>
+  <p>The success rate of a person paying the ransom relies on the user's attachment to the data stored on their computer. Users who do pay the ransom can often be exploited further, and asked for a further payment to release their data, since paying does not guarantee the data will actually be returned.</p>
+
+  <h3>Minimising the risk of ransomware</h3>
+  <p>The main way to minimise the risk of ransomware is to make sure you have a copy of your data. If you create a separate backup of your data, and keep it up to date, then the risk of losing your data in a ransomware attack becomes greatly reduced. This means that you can reinstate your data if it is deleted or locked.</p>
+  <p>The risk of losing data can also be reduced by storing data in the cloud. Cloud systems often have a facility that allows the user to roll back to a previous version of the data, so it can be reinstated if lost.</p>
+  <p>Because ransomware often enters a system in a similar way to a trojan or through phishing, the same general precautions — only running trusted software, and being cautious of suspicious links and attachments — also help reduce the risk of a ransomware infection in the first place.</p>
+<div class="research"><span class="r-label">Question 8</span><p>A company can use a practice called the principle of least privilege (POLP) to help keep data safe and secure.</p><p>Find out what POLP is, and how it can help keep data safe and secure.</p><textarea placeholder="Notes from your own research…"></textarea><p class="r-note">This is a research task — there's no single correct answer, and it isn't scored.</p></div>
+<div class="task" data-task="classify" data-points="8">
+  <p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p>
+  <h4>Click which type of malware each description matches.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="ransom"><span class="term">Encrypts a user's files and demands payment to restore access to them</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="virus"><span class="term">Attaches itself to a clean file and needs that file to be run to spread</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="adware"><span class="term">Displays constant targeted pop-up adverts based on browsing habits</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="rootkit"><span class="term">Gives an attacker hidden administrator-level access to a computer</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="trojan"><span class="term">Disguises itself as legitimate software to trick the user into running it</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="worm"><span class="term">Replicates itself across a network without needing to attach to another file</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="spyware"><span class="term">Records every key press and sends the data to a third party</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+    <div class="classify-item" data-answer="bot"><span class="term">Lies dormant on many computers until triggered to attack an organisation together</span><span class="choices"><button data-choice="virus">Virus</button><button data-choice="trojan">Trojan</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the term from its description.</h4>
+  <div class="sub-q">
+    <label>a) Malware installed on a user's computer that records every key press and sends it to a third party.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A key logger (a type of spyware)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) A network of compromised computers, each running a dormant bot, used to launch a large-scale attack.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A botnet</div>
+    <div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Software used to identify malware on a computer and remove it.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Anti-malware software</div>
+    <div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) The well-known 2010 computer worm believed to have targeted a nuclear power plant's equipment.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Stuxnet</div>
+    <div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Explain the difference between how a virus and a worm spread. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>A virus attaches itself to a clean file or program</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A virus needs that file to be run/opened by a user before it replicates or causes damage</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A worm is a standalone program that does not need to attach itself to another file</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A worm exploits security holes/vulnerabilities, often in the operating system, to replicate</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A worm can spread across a network to other computers without further user interaction once downloaded</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A virus mainly aims to corrupt or disrupt data, while a worm aims to fill storage space and clog network bandwidth</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p>
+  <h4>Discuss how an organisation could minimise the risk of a ransomware attack. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>Keep regular, up-to-date backups of data, stored separately from the live system</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This means data can be restored without paying a ransom if files are encrypted or deleted</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Store data in the cloud, where version history may allow rolling back to before the attack</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Since ransomware often enters a system like a trojan, only run software and open attachments from trusted sources</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Keep anti-virus/anti-malware software installed and up to date to detect it before it runs</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Use a firewall to help detect and block suspicious incoming traffic</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Train staff to recognise phishing emails and suspicious links, since these are a common delivery method</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Even if a ransom is paid, there is no guarantee data will be returned, so prevention and backups matter more than being prepared to pay</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="4">
+  <p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p>
+  <div class="mcq" data-answer="1"><p class="q">1. Which type of malware must attach itself to a clean file to spread?</p><div class="opts"><button class="opt" data-idx="0">Worm</button><button class="opt" data-idx="1">Virus</button><button class="opt" data-idx="2">Rootkit</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">2. What is the main danger of a trojan relying on user error rather than a security flaw?</p><div class="opts"><button class="opt" data-idx="0">It cannot be detected by anti-virus software at all</button><button class="opt" data-idx="1">A user can be tricked into running it even with good security software installed</button><button class="opt" data-idx="2">It only affects Mac computers</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Why is a rootkit particularly difficult to remove once installed?</p><div class="opts"><button class="opt" data-idx="0">It is designed to stay hidden deep within the operating system</button><button class="opt" data-idx="1">It only exists in the browser cache</button><button class="opt" data-idx="2">It automatically deletes itself after a week</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">4. What is the main purpose of a zombie bot in a botnet?</p><div class="opts"><button class="opt" data-idx="0">To immediately delete all files on the infected computer</button><button class="opt" data-idx="1">To lie dormant until triggered to join a large-scale attack on an organisation</button><button class="opt" data-idx="2">To display pop-up adverts</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · eSecurity — built for revision, points are just for you.
+</footer>
+
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+})();
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+function load(){
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function save(mutator){
+  try {
+    var s = load();
+    mutator(s);
+    localStorage.setItem(STORE_KEY, JSON.stringify(s));
+  } catch(e){ /* storage unavailable or full — fail silently */ }
+}
+
+var subQs      = Array.prototype.slice.call(document.querySelectorAll('.task[data-task="open"] .sub-q'));
+var classifyIt = Array.prototype.slice.call(document.querySelectorAll('.classify-item'));
+var mcqs       = Array.prototype.slice.call(document.querySelectorAll('.mcq'));
+var orderTasks = Array.prototype.slice.call(document.querySelectorAll('.task[data-task="order"]'));
+var selectTasks= Array.prototype.slice.call(document.querySelectorAll('.task[data-task="select"]'));
+
+// ---- SAVE: listen alongside the page's own handlers ----
+
+subQs.forEach(function(sq, i){
+  var key = 'subq-' + i;
+  var ta = sq.querySelector('textarea');
+  var btn = sq.querySelector('.check-btn');
+  var cb = sq.querySelector('.self-mark input[type=checkbox]');
+
+  if(ta) ta.addEventListener('input', function(){
+    save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+  });
+  if(btn) btn.addEventListener('click', function(){
+    save(function(s){
+      s[key] = s[key] || {};
+      s[key].text = ta ? ta.value : '';
+      s[key].checked = !!(ta && ta.value.trim());
+    });
+  });
+  if(cb) cb.addEventListener('change', function(){
+    save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+  });
+});
+
+classifyIt.forEach(function(item, i){
+  var buttons = item.querySelectorAll('.choices button');
+  buttons.forEach(function(b, bi){
+    b.addEventListener('click', function(){
+      save(function(s){ s['classify-' + i] = bi; });
+    });
+  });
+});
+
+mcqs.forEach(function(mcq, i){
+  var opts = mcq.querySelectorAll('.opt');
+  opts.forEach(function(o, oi){
+    o.addEventListener('click', function(){
+      save(function(s){ s['mcq-' + i] = oi; });
+    });
+  });
+});
+
+orderTasks.forEach(function(task, ti){
+  var items = task.querySelectorAll('.order-item');
+  items.forEach(function(item){
+    item.addEventListener('click', function(){
+      save(function(s){
+        var key = 'order-' + ti;
+        s[key] = s[key] || [];
+        s[key].push(item.dataset.order);
+      });
+    });
+  });
+});
+
+selectTasks.forEach(function(task, ti){
+  var btn = task.querySelector('.check-select-btn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    var items = Array.prototype.slice.call(task.querySelectorAll('.select-item input'));
+    var checkedIdx = [];
+    items.forEach(function(inp, ii){ if(inp.checked) checkedIdx.push(ii); });
+    save(function(s){ s['select-' + ti] = checkedIdx; });
+  });
+});
+
+// ---- RESTORE: replay stored answers as real clicks, so the page's
+// own scoring logic runs exactly as it did originally ----
+
+(function restore(){
+  var s = load();
+
+  subQs.forEach(function(sq, i){
+    var rec = s['subq-' + i];
+    if(!rec) return;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta && rec.text) ta.value = rec.text;
+    if(rec.checked && btn) btn.click();
+    if(rec.selfMarked && cb){
+      cb.checked = true;
+      cb.dispatchEvent(new Event('change'));
+    }
+  });
+
+  classifyIt.forEach(function(item, i){
+    var bi = s['classify-' + i];
+    if(bi === undefined) return;
+    var buttons = item.querySelectorAll('.choices button');
+    if(buttons[bi]) buttons[bi].click();
+  });
+
+  mcqs.forEach(function(mcq, i){
+    var oi = s['mcq-' + i];
+    if(oi === undefined) return;
+    var opts = mcq.querySelectorAll('.opt');
+    if(opts[oi]) opts[oi].click();
+  });
+
+  orderTasks.forEach(function(task, ti){
+    var seq = s['order-' + ti];
+    if(!seq) return;
+    seq.forEach(function(orderVal){
+      var items = task.querySelectorAll('.order-item');
+      for(var j = 0; j < items.length; j++){
+        if(items[j].dataset.order === orderVal && !items[j].disabled){
+          items[j].click();
+          break;
+        }
+      }
+    });
+  });
+
+  selectTasks.forEach(function(task, ti){
+    var idxArr = s['select-' + ti];
+    if(!idxArr) return;
+    var items = Array.prototype.slice.call(task.querySelectorAll('.select-item input'));
+    idxArr.forEach(function(ii){ if(items[ii]) items[ii].checked = true; });
+    var btn = task.querySelector('.check-select-btn');
+    if(btn) btn.click();
+  });
+})();
+
+// ---- Small "reset my answers" control ----
+var resetBtn = document.createElement('button');
+resetBtn.textContent = 'Reset my answers';
+resetBtn.setAttribute('type', 'button');
+resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+  + 'font-size:11px;padding:7px 11px;background:transparent;border:1px solid #496354;'
+  + 'color:#a9a294;border-radius:3px;cursor:pointer;';
+resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e9e4d6'; });
+resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#a9a294'; });
+resetBtn.addEventListener('click', function(){
+  if(confirm('Clear all your saved answers on this page?')){
+    localStorage.removeItem(STORE_KEY);
+    location.reload();
+  }
+});
+document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
