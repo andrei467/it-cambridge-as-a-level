@@ -38,7 +38,7 @@
                 <div class="bg-slate-100 border border-slate-200 rounded-xl px-4 py-1.5 flex items-center space-x-3">
                     <span class="text-xs uppercase tracking-wider font-semibold text-slate-500">Score</span>
                     <div class="text-lg font-extrabold text-blue-600">
-                        <span id="current-score">0</span> / <span id="total-possible-score">42</span>
+                        <span id="current-score">0</span> / <span id="total-possible-score">167</span>
                         <span class="text-xs text-slate-400 font-normal">pts</span>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
             <div class="flex items-start gap-3">
                 <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <div>
-                    <span class="font-semibold">Instructions:</span> Answer all questions below. When self-grading, select full integer marks (0 up to max points). When finished, click <strong>Download Results (.txt)</strong> to save your mock exam results  to your device.
+                    <span class="font-semibold">Instructions:</span> Answer all questions below. When self-grading, select full integer marks (0 up to max points). When finished, click <strong>Download Results (.txt)</strong> to save your mock exam results to your device.
                 </div>
             </div>
             <button onclick="clearLocalStorage()" class="text-xs font-semibold text-red-600 hover:text-red-800 hover:underline flex-shrink-0 self-center">
@@ -91,7 +91,7 @@
             <div>
                 <h3 class="text-lg font-bold text-slate-900">Complete & Save Exam</h3>
                 <p class="text-sm text-slate-600 mt-1">
-                    Total Marks Awarded: <span id="final-score-display" class="font-extrabold text-blue-600">0</span> / <span id="final-total-display">42</span>
+                    Total Marks Awarded: <span id="final-score-display" class="font-extrabold text-blue-600">0</span> / <span id="final-total-display">167</span>
                 </p>
             </div>
 
@@ -117,7 +117,7 @@
     <script>
         const STORAGE_KEY = 'alevel_it_mock_exam_data_v1';
 
-        // 11 exact questions with maximum marks
+        // 32 questions with maximum marks
         const questionsData = [
             {
                 id: "Q1",
@@ -184,6 +184,180 @@
                 numLabel: "10",
                 marks: 4,
                 text: "Describe other threats to the environment from the development of emerging technology?"
+            },
+            {
+                id: "Q12",
+                numLabel: "11 (a)",
+                marks: 4,
+                text: "Describe what is meant by web-conferencing."
+            },
+            {
+                id: "Q13",
+                numLabel: "11 (b)",
+                marks: 5,
+                text: "Describe how web-conferencing is made possible by internet technologies."
+            },
+            {
+                id: "Q14",
+                numLabel: "12",
+                marks: 6,
+                text: "Analyse the role of social networks in changing social patterns among young people."
+            },
+            {
+                id: "Q15",
+                numLabel: "13 (a)",
+                marks: 2,
+                text: "Explain what is meant by digital currency."
+            },
+            {
+                id: "Q16",
+                numLabel: "13 (b)",
+                marks: 6,
+                text: "Evaluate the impact of digital currencies."
+            },
+            {
+                id: "Q17",
+                numLabel: "14 (a)",
+                marks: 2,
+                text: "Describe the characteristics of online tutorials."
+            },
+            {
+                id: "Q18",
+                numLabel: "14 (b)",
+                marks: 2,
+                text: "Two types of online tutorial are 'recorded' and 'interactive'. 'Recorded' tutorials do not require user input, but 'interactive' tutorials do. Describe the differences between these two types of online tutorial."
+            },
+            {
+                id: "Q19",
+                numLabel: "15",
+                marks: 6,
+                text: "A customer in a restaurant can pay the bill with a credit card using a mobile chip and pin reader carried by a waiter. Describe the computer processing involved in the payment of the bill by credit card using the mobile chip and pin reader."
+            },
+            {
+                id: "Q20",
+                numLabel: "16 (a)",
+                marks: 3,
+                text: "The developers already have a desktop computer system. Describe the additional computer hardware they need in order to participate in a web-conference."
+            },
+            {
+                id: "Q21",
+                numLabel: "16 (b)",
+                marks: 6,
+                text: "Describe, in detail, how a web-conference can be used to discuss their visual materials and documents."
+            },
+            {
+                id: "Q22",
+                numLabel: "17",
+                marks: 6,
+                text: "Discuss the advantages and disadvantages of software-based training methods."
+            },
+            {
+                id: "Q23",
+                numLabel: "18",
+                marks: 4,
+                text: "Virtual reality and augmented reality are technologies used in medicine. Explain the difference between virtual reality and augmented reality."
+            },
+            {
+                id: "Q24",
+                numLabel: "19 (a)",
+                marks: 2,
+                text: "Describe the purpose of a shopping cart within the software."
+            },
+            {
+                id: "Q25",
+                numLabel: "19 (b)",
+                marks: 6,
+                text: "Apart from the shopping cart, describe, including their use, the software or software modules that the retailer used to set up the online store."
+            },
+            {
+                id: "Q26",
+                numLabel: "20",
+                marks: 4,
+                text: "Information technology (IT) has changed the way that people both observe and take part in sports. Describe how IT has changed the sports experience for people."
+            },
+            {
+                id: "Q27",
+                numLabel: "21 (a)",
+                marks: 5,
+                text: "Describe how the use of a credit card for online purchases may subject credit card account holders to fraud."
+            },
+            {
+                id: "Q28",
+                numLabel: "21 (b)",
+                marks: 6,
+                text: "Explain how a merchant selling goods online can attempt to combat credit card fraud."
+            },
+            {
+                id: "Q29",
+                numLabel: "22",
+                marks: 4,
+                text: "Compare and contrast the use of a Massive Open Online Course (MOOC) with the use of online tutorials."
+            },
+            {
+                id: "Q30",
+                numLabel: "23",
+                marks: 6,
+                text: "Discuss the impact on society of online banking."
+            },
+            {
+                id: "Q31",
+                numLabel: "24",
+                marks: 4,
+                text: "A company has developed a new product. Its market research department has decided to use chat rooms to gather information from potential customers about the product. Explain why they would use a chat room rather than other social networking methods to gather the customer information."
+            },
+            {
+                id: "Q32",
+                numLabel: "25",
+                marks: 4,
+                text: "A college department has a free Massive Open Online Course (MOOC) with access for its students via the World Wide Web. Describe the benefits of a MOOC."
+            },
+            {
+                id: "Q33",
+                numLabel: "26 (a)",
+                marks: 4,
+                text: "Describe the benefits to students of using online tutorials."
+            },
+            {
+                id: "Q34",
+                numLabel: "26 (b)",
+                marks: 2,
+                text: "Give two reasons why a student might not be able to use online tutorials."
+            },
+            {
+                id: "Q35",
+                numLabel: "27",
+                marks: 6,
+                text: "Analyse the impact of network bandwidth on video-conferencing."
+            },
+            {
+                id: "Q36",
+                numLabel: "28",
+                marks: 6,
+                text: "Social networking has led to a reduction in meeting face to face. Discuss the ways that social networking has changed social patterns."
+            },
+            {
+                id: "Q37",
+                numLabel: "29",
+                marks: 6,
+                text: "A large company employs a small team of workers to design a new, complex product. They all work on the same site and need to discuss possible designs and costings and to exchange documentation on a weekly basis. Network connections are intermittent. The company could use video-conferencing or face-to-face meetings for the workers' discussions. Identify, giving reasons, the more appropriate method."
+            },
+            {
+                id: "Q38",
+                numLabel: "30",
+                marks: 6,
+                text: "Evaluate the impact of e-business on society."
+            },
+            {
+                id: "Q39",
+                numLabel: "31 (a)",
+                marks: 3,
+                text: "The data mining process consists of several phases. Describe the tasks that occur in Data understanding."
+            },
+            {
+                id: "Q40",
+                numLabel: "31 (b)",
+                marks: 3,
+                text: "The data mining process consists of several phases. Describe the tasks that occur in Deployment."
             }
         ];
 
@@ -399,7 +573,6 @@
             fileContent += `FINAL SCORE: ${totalAwarded} / ${totalPossible}\n`;
             fileContent += `==================================================\n`;
 
-            // Required filename format: [studentname]-mock-exam-it-a-level.txt
             const sanitizedName = studentName.toLowerCase().replace(/[^a-z0-9_-]/gi, '_');
             const fileName = `${sanitizedName}-mock-exam-it-a-level.txt`;
 
